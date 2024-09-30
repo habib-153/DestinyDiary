@@ -1,8 +1,8 @@
 {
-  "name": "found-x-server",
+  "name": "destiny-diary",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Next Level Developer",
+  "author": "Habibur Rahman",
   "license": "MIT",
   "scripts": {
     "start": "node dist/server.js",
