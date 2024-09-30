@@ -4,20 +4,22 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import FXForm from "@/src/components/form/FXForm";
 import FXInput from "@/src/components/form/FXInput";
 import registerValidationSchema from "@/src/schema/registerSchema";
 import { useUserRegistration } from "@/src/hooks/auth.hook";
+import { useUser } from "@/src/context/user.provider";
 
 export default function RegisterPage() {
-  const { mutate: handleUserRegistration, isPending } = useUserRegistration();
-
-  //   useEffect(() => {
-  //     if (isPending) {
-  //       // Handle Loading satate
-  //     }
-  //   }, [isPending]);
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect') || '/';
+  const router = useRouter()
+  const { setIsLoading: userRegLoading } = useUser();
+  const { mutate: handleUserRegistration, isPending, isSuccess } = useUserRegistration();
+  
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const userData = {
@@ -26,28 +28,26 @@ export default function RegisterPage() {
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     };
 
-    console.log("Inside form user data: ", userData);
-
     handleUserRegistration(userData);
+    userRegLoading(true);
   };
 
-  if (isPending) {
-    //  handle loading state
-  }
+  useEffect(() => {
+    if (!isPending && isSuccess) {
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push("/");
+      }
+    }
+  }, [isPending, isSuccess]);
 
   return (
     <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center">
-      <h3 className="my-2 text-xl font-bold">Register with FoundX</h3>
-      <p className="mb-4">Help Lost Items Find Their Way Home</p>
+      <h3 className="my-2 text-xl font-bold">Register with DestinyDiary</h3>
+      <p className="mb-4">Explore Together, Adventure Forever</p>
       <div className="w-[35%]">
         <FXForm
-          //! Only for development
-          defaultValues={{
-            name: "Mir Hussain",
-            email: "mir@gmail.com",
-            mobileNumber: "01711223344",
-            password: "123456",
-          }}
           resolver={zodResolver(registerValidationSchema)}
           onSubmit={onSubmit}
         >
@@ -68,7 +68,6 @@ export default function RegisterPage() {
               type="password"
             />
           </div>
-
           <Button
             className="my-3 w-full rounded-md bg-default-900 text-default"
             size="lg"

@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 
 export default function layout({
   children,
-  recentPosts,
 }: {
   children: ReactNode;
   recentPosts: ReactNode;
@@ -10,7 +9,6 @@ export default function layout({
   return (
     <>
       {children}
-      {recentPosts}
     </>
   );
 }
