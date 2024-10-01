@@ -4,33 +4,28 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
+export const POST_STATUS = {
+  BASIC: "BASIC",
+  PREMIUM: "PREMIUM",
+} as const;
+
+export type TPostCategory =
+  | "Adventure"
+  | "Exploration"
+  | "Business Travel"
+  | "Family Vacation"
+  | "Relaxation"
+  | "Luxury Travel";
 export interface IPost {
-  _id: string;
+  _id?: string;
   title: string;
   description: string;
-  images: string[];
-  location: string;
-  city: string;
-  dateFound: string;
-  status: string;
-  isReported: boolean;
-  reportCount: number;
-  category: ICategory;
-  user: IUser;
-  questions: string[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-export interface ICategory {
-  _id: string;
-  name: string;
-  postCount: number;
-  isDeleted: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  image: string;
+  category: TPostCategory;
+  author?: string;
+  status: keyof typeof POST_STATUS;
+  upVotes?: number;
+  downVotes?: number;
 }
 
 export interface IUser {
@@ -41,7 +36,7 @@ export interface IUser {
   status: string;
   mobileNumber: string;
   profilePhoto: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
