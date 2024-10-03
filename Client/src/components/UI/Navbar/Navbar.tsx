@@ -26,19 +26,19 @@ import Logo from "@/src/assets/Logo2.jpg";
 import { useUser } from "@/src/context/user.provider";
 
 export const Navbar = () => {
-    const { user, isLoading } = useUser();
+    const { user } = useUser();
     const router = useRouter();
   
     return (
       <NextUINavbar maxWidth="xl" position="sticky">
-        <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+        <NavbarContent className="basis-1/5 flex sm:basis-full" justify="start">
           <NavbarBrand as="li" className="gap-3 max-w-fit">
             <NextLink className="flex justify-start items-center gap-2" href="/">
              <Image alt="Logo" className="rounded-2xl" height={50} src={Logo} width={50} />
               <p className="font-bold text-2xl text-inherit">DestinyDiary</p>
             </NextLink>
           </NavbarBrand>
-          <ul className="hidden lg:flex gap-4 justify-start ml-2">
+          <ul className="hidden lg:flex gap-4 ml-2">
             {siteConfig.navItems.map((item) => (
               <NavbarItem key={item.href}>
                 <NextLink
@@ -57,38 +57,31 @@ export const Navbar = () => {
         </NavbarContent>
   
         <NavbarContent
-          className="hidden sm:flex basis-1/5 sm:basis-full"
+          className="flex basis-1/5 sm:basis-full"
           justify="end"
         >
-          <NavbarItem className="hidden sm:flex gap-2">
-            <ThemeSwitch />
+          <NavbarItem className="flex gap-2">
+            <ThemeSwitch className="hidden sm:block"/>
           </NavbarItem>
           {user?.email ? (
-            <NavbarItem className="hidden sm:flex gap-2">
+            <NavbarItem className="flex gap-2">
               <NavbarDropdown user={user} />
             </NavbarItem>
           ) : (
-            <NavbarItem className="hidden sm:flex gap-2">
+            <NavbarItem className="flex gap-2">
               <Button onClick={() => router.push("/login")}>Login</Button>
             </NavbarItem>
           )}
+          <NavbarMenuToggle className="lg:hidden"/>
         </NavbarContent>
-  
-        <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-          <ThemeSwitch />
-          <NavbarMenuToggle />
-        </NavbarContent>
-  
         <NavbarMenu>
-          <div className="mx-4 mt-2 flex flex-col gap-2">
+          <div className="mx-4 mt-2 flex text-black flex-col gap-2">
             {siteConfig.navMenuItems.map((item, index) => (
               <NavbarMenuItem key={`${item}-${index}`}>
                 <Link
                   color={
                     index === 2
                       ? "primary"
-                      : index === siteConfig.navMenuItems.length - 1
-                        ? "danger"
                         : "foreground"
                   }
                   href="#"

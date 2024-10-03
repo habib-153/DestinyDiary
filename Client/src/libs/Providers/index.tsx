@@ -4,6 +4,7 @@ import * as React from "react";
 import { NextUIProvider } from "@nextui-org/system";
 import { useRouter } from "next/navigation";
 import { ThemeProviderProps } from "next-themes/dist/types";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 
@@ -16,15 +17,17 @@ export interface ProvidersProps {
 
 const queryClient = new QueryClient();
 
-export function Providers({ children }: ProvidersProps) {
+export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
 
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
         <NextUIProvider navigate={router.push}>
-          <Toaster />
-          {children}
+          <Toaster richColors position="top-center"/>
+          <NextThemesProvider {...themeProps}>
+            {children}
+          </NextThemesProvider>
         </NextUIProvider>
       </UserProvider>
     </QueryClientProvider>
