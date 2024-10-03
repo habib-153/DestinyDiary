@@ -4,6 +4,8 @@ import { USER_ROLE } from '../User/user.constant';
 import { PostControllers } from './post.controller';
 import { parseBody } from '../../middlewares/bodyParser';
 import { multerUpload } from '../../config/multer.config';
+import { PostValidation } from './post.validation';
+import validateRequest from '../../middlewares/validateRequest';
 
 const router = express.Router();
 
@@ -13,7 +15,7 @@ router.post(
   multerUpload.single('image'),
   //validateImageFileRequest(ImageFilesArrayZodSchema),
   parseBody,
-  //validateRequest(ItemValidation.createItemValidationSchema),
+  validateRequest(PostValidation.createPostValidationSchema),
   PostControllers.createPost
 );
 
@@ -24,10 +26,14 @@ router.get('/:id', PostControllers.getSinglePost);
 router.put(
   '/:id',
   auth(USER_ROLE.USER),
-  //validateRequest(ItemValidation.updateItemValidationSchema),
+  validateRequest(PostValidation.createPostValidationSchema),
   PostControllers.updatePost
 );
 
 router.delete('/:id', auth(USER_ROLE.USER), PostControllers.deletePost);
+router.post('/:id/upvote', auth(USER_ROLE.USER), PostControllers.addPostUpvote);
+router.post('/:id/downvote', auth(USER_ROLE.USER), PostControllers.addPostDownvote);
+router.delete('/:id/upvote', auth(USER_ROLE.USER), PostControllers.removePostUpvote);
+router.delete('/:id/downvote', auth(USER_ROLE.USER), PostControllers.removePostDownvote);
 
 export const PostRoutes = router;

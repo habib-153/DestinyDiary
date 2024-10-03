@@ -36,8 +36,38 @@ const getSingleUser = catchAsync(async (req, res) => {
   });
 });
 
+const followUser = catchAsync(async (req, res) => {
+  const followingId = req.params.followingId
+  const userData = req.user
+
+  const result = await UserServices.addFollowingInDB(userData, followingId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'You are now following this profile',
+    data: result,
+  });
+})
+
+const unfollowUser = catchAsync(async (req, res) => {
+  const followingId = req.params.followingId
+  const userData = req.user
+
+  const result = await UserServices.removeFollowingFromDB(userData, followingId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'You have unfollowed this profile',
+    data: result,
+  });
+})
+
 export const UserControllers = {
   getSingleUser,
   userRegister,
   getAllUsers,
+  followUser,
+  unfollowUser
 };

@@ -8,7 +8,7 @@ export type TPost = {
     category: TPostCategory
     author: Types.ObjectId
     status: keyof typeof POST_STATUS
-    upVotes: number
-    downVotes: number
+    upVotes:  Types.ObjectId[];
+    downVotes:  Types.ObjectId[];
     isDeleted: boolean
 }

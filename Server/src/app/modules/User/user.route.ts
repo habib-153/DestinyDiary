@@ -17,3 +17,5 @@ router.post(
 );
 router.get('/', auth(USER_ROLE.ADMIN), UserControllers.getAllUsers);
 router.get('/:id', UserControllers.getSingleUser);
+router.patch('/follow/:followingId', auth(USER_ROLE.USER), UserControllers.followUser);
+router.patch('/unfollow/:followingId', auth(USER_ROLE.USER), UserControllers.unfollowUser);

@@ -3,10 +3,10 @@
 import { revalidateTag } from "next/cache";
 
 import axiosInstance from "@/src/libs/AxiosInstance";
-import { IPost } from "@/src/types";
 import envConfig from "@/src/config/envConfig";
+import { getCurrentUser } from "../AuthService";
 
-export const createPost = async(data: IPost) => {
+export const createPost = async(data: FormData) => {
     try {
         const response = await axiosInstance.post("/posts", data);
 
@@ -30,3 +30,12 @@ export const getAllPosts = async() => {
     
       return data;
 }
+
+
+export const getMyPosts = async () => {
+    const user = await getCurrentUser();
+  
+    const res = await axiosInstance.get(`/posts/${user?._id}`);
+  
+    return res.data;
+  };

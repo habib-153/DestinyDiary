@@ -70,10 +70,70 @@ const deletePost = catchAsync(async (req, res) => {
   });
 });
 
+const addPostUpvote = catchAsync(async (req, res) => {
+  const result = await PostServices.addPostUpvoteIntoDB(
+    req.params.postId,
+    req.user,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Thanks for your upvote',
+    data: result,
+  });
+});
+
+const addPostDownvote = catchAsync(async (req, res) => {
+  const result = await PostServices.addPostDownvoteIntoDB(
+    req.params.postId,
+    req.user,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Thanks for your vote',
+    data: result,
+  });
+});
+
+const removePostUpvote = catchAsync(async (req, res) => {
+  const result = await PostServices.removePostUpvoteFromDB(
+    req.params.postId,
+    req.user,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Upvote removed',
+    data: result,
+  });
+});
+
+const removePostDownvote = catchAsync(async (req, res) => {
+  const result = await PostServices.removePostDownvoteFromDB(
+    req.params.postId,
+    req.user,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Downvote removed',
+    data: result,
+  });
+});
+
 export const PostControllers = {
   createPost,
   getAllPost,
   getSinglePost,
   updatePost,
   deletePost,
+  addPostUpvote,
+  addPostDownvote,
+  removePostUpvote,
+  removePostDownvote,
 };
