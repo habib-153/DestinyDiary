@@ -30,13 +30,6 @@ const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
     }
-    // checking if the user is already deleted
-
-    const status = user?.status;
-
-    if (status === 'BLOCKED') {
-      throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked !');
-    }
 
     if (
       user.passwordChangedAt &&
