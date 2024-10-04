@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post(
   '/',
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.USER, USER_ROLE.ADMIN),
   multerUpload.single('image'),
   //validateImageFileRequest(ImageFilesArrayZodSchema),
   parseBody,
@@ -31,7 +31,7 @@ router.put(
 );
 
 router.delete('/:id', auth(USER_ROLE.USER), PostControllers.deletePost);
-router.post('/:id/upvote', auth(USER_ROLE.USER), PostControllers.addPostUpvote);
+router.post('/:postId/upvote', auth(USER_ROLE.USER), PostControllers.addPostUpvote);
 router.post('/:id/downvote', auth(USER_ROLE.USER), PostControllers.addPostDownvote);
 router.delete('/:id/upvote', auth(USER_ROLE.USER), PostControllers.removePostUpvote);
 router.delete('/:id/downvote', auth(USER_ROLE.USER), PostControllers.removePostDownvote);

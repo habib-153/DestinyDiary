@@ -6,7 +6,7 @@ import sendResponse from '../../utils/sendResponse';
 import { PostServices } from './post.service';
 
 const createPost = catchAsync(async (req, res) => {
-  if (!req.files) {
+  if (!req.file) {
     throw new AppError(400, 'Please upload an image');
   }
 

@@ -2,9 +2,10 @@
 'use server'
 import { revalidateTag } from "next/cache";
 
+import { getCurrentUser } from "../AuthService";
+
 import axiosInstance from "@/src/libs/AxiosInstance";
 import envConfig from "@/src/config/envConfig";
-import { getCurrentUser } from "../AuthService";
 
 export const createPost = async(data: FormData) => {
     try {
@@ -18,17 +19,15 @@ export const createPost = async(data: FormData) => {
     }
 }
 
-export const getAllPosts = async() => {
-    const fetchOption = {
-        next: {
-          tags: ["posts"],
-        },
-      };
-    
-      const res = await fetch(`${envConfig.baseApi}/posts`, fetchOption);
-      const data = await res.json();
-    
-      return data;
+export const getAllPosts = async (apiUrl: string) => {
+    const res = await fetch(apiUrl, {
+      next: {
+        tags: ["posts"],
+      },
+    });
+    const data = await res.json();
+  
+    return data;
 }
 
 

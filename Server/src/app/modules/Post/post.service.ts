@@ -88,7 +88,7 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
     return null;
   }
 
-  return result 
+  return result;
 };
 
 const getSinglePostFromDB = async (id: string) => {
@@ -119,7 +119,10 @@ const deletePostFromDB = async (id: string) => {
   return result;
 };
 
-const addPostUpvoteIntoDB = async (postId: string, userData: Record<string, unknown>) => {
+const addPostUpvoteIntoDB = async (
+  postId: string,
+  userData: Record<string, unknown>
+) => {
   const { email, _id } = userData;
 
   const user = await User.isUserExistsByEmail(email as string);
@@ -139,11 +142,23 @@ const addPostUpvoteIntoDB = async (postId: string, userData: Record<string, unkn
     session.startTransaction();
 
     if (post.downVotes.some((downvoteId) => downvoteId.equals(userId))) {
-      await Post.findByIdAndUpdate(postId, { $pull: { downVotes: _id } }, { new: true, runValidators: true, session });
+      await Post.findByIdAndUpdate(
+        postId,
+        { $pull: { downVotes: _id } },
+        { new: true, runValidators: true, session }
+      );
     }
 
-    const result = await Post.findByIdAndUpdate(postId, { $addToSet: { upVotes: _id } }, { new: true, runValidators: true, session }).populate('upVotes');
-    await User.findByIdAndUpdate(post.author, { $inc: { totalUpVotes: 1 } }, { new: true, session });
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      { $addToSet: { upVotes: _id } },
+      { new: true, runValidators: true, session }
+    ).populate('upVotes');
+    await User.findByIdAndUpdate(
+      post.author,
+      { $inc: { totalUpVotes: 1 } },
+      { new: true, session }
+    );
 
     await session.commitTransaction();
     return result;
@@ -155,7 +170,10 @@ const addPostUpvoteIntoDB = async (postId: string, userData: Record<string, unkn
   }
 };
 
-const removePostUpvoteFromDB = async (postId: string, userData: Record<string, unknown>) => {
+const removePostUpvoteFromDB = async (
+  postId: string,
+  userData: Record<string, unknown>
+) => {
   const { email, _id } = userData;
 
   const user = await User.isUserExistsByEmail(email as string);
@@ -174,8 +192,16 @@ const removePostUpvoteFromDB = async (postId: string, userData: Record<string, u
   try {
     session.startTransaction();
 
-    const result = await Post.findByIdAndUpdate(postId, { $pull: { upVotes: _id } }, { new: true, runValidators: true, session }).populate('upVotes');
-    await User.findByIdAndUpdate(post.author, { $inc: { totalUpVotes: -1 } }, { new: true, session });
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      { $pull: { upVotes: _id } },
+      { new: true, runValidators: true, session }
+    ).populate('upVotes');
+    await User.findByIdAndUpdate(
+      post.author,
+      { $inc: { totalUpVotes: -1 } },
+      { new: true, session }
+    );
 
     await session.commitTransaction();
     return result;
@@ -187,7 +213,10 @@ const removePostUpvoteFromDB = async (postId: string, userData: Record<string, u
   }
 };
 
-const addPostDownvoteIntoDB = async (postId: string, userData: Record<string, unknown>) => {
+const addPostDownvoteIntoDB = async (
+  postId: string,
+  userData: Record<string, unknown>
+) => {
   const { email, _id } = userData;
 
   const user = await User.isUserExistsByEmail(email as string);
@@ -199,7 +228,10 @@ const addPostDownvoteIntoDB = async (postId: string, userData: Record<string, un
   const userId = new Types.ObjectId(_id as string);
 
   if (post.downVotes.some((downvoteId) => downvoteId.equals(userId))) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'You already downvote this post!');
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'You already downvote this post!'
+    );
   }
 
   const session = await mongoose.startSession();
@@ -207,10 +239,18 @@ const addPostDownvoteIntoDB = async (postId: string, userData: Record<string, un
     session.startTransaction();
 
     if (post.upVotes.some((upvoteId) => upvoteId.equals(userId))) {
-      await Post.findByIdAndUpdate(postId, { $pull: { upVotes: _id } }, { new: true, runValidators: true, session });
+      await Post.findByIdAndUpdate(
+        postId,
+        { $pull: { upVotes: _id } },
+        { new: true, runValidators: true, session }
+      );
     }
 
-    const result = await Post.findByIdAndUpdate(postId, { $addToSet: { downVotes: _id } }, { new: true, runValidators: true, session }).populate('downVotes');
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      { $addToSet: { downVotes: _id } },
+      { new: true, runValidators: true, session }
+    ).populate('downVotes');
 
     await session.commitTransaction();
     return result;
@@ -222,7 +262,10 @@ const addPostDownvoteIntoDB = async (postId: string, userData: Record<string, un
   }
 };
 
-const removePostDownvoteFromDB = async (postId: string, userData: Record<string, unknown>) => {
+const removePostDownvoteFromDB = async (
+  postId: string,
+  userData: Record<string, unknown>
+) => {
   const { email, _id } = userData;
 
   const user = await User.isUserExistsByEmail(email as string);
@@ -234,14 +277,21 @@ const removePostDownvoteFromDB = async (postId: string, userData: Record<string,
   const userId = new Types.ObjectId(_id as string);
 
   if (!post.downVotes.some((downvoteId) => downvoteId.equals(userId))) {
-    throw new AppError(httpStatus.BAD_REQUEST, "You have't downvote this post!");
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "You have't downvote this post!"
+    );
   }
 
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
 
-    const result = await Post.findByIdAndUpdate(postId, { $pull: { downVotes: _id } }, { new: true, runValidators: true, session }).populate('downVotes');
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      { $pull: { downVotes: _id } },
+      { new: true, runValidators: true, session }
+    ).populate('downVotes');
 
     await session.commitTransaction();
     return result;

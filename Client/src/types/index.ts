@@ -22,9 +22,11 @@ export interface IPost {
   description: string;
   image: string;
   category: TPostCategory;
-  author?: string;
+  author?: IUser;
   status: keyof typeof POST_STATUS;
   upVotes?: number;
+  upvoteCount?: number;
+  downvoteCount?: number;
   downVotes?: number;
 }
 
