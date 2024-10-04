@@ -37,7 +37,7 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
 //   return { meta, result };
 // };
 const getAllPostsFromDB = async (query: Record<string, unknown>) => {
-  const { sort, searchTerm, ...searchQuery } = query;
+  const { sort, searchTerm, category } = query;
 
   // Base aggregation pipeline
   const aggregationPipeline: any[] = [
@@ -71,17 +71,23 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
           { title: searchRegex },
           { category: searchRegex },
           { 'author.name': searchRegex },
+          { 'author.email': searchRegex },
         ],
       },
     } as any);
   }
 
-  if (sort === 'upvote' || sort === 'downvote') {
+  if (sort === 'upvotes' || sort === 'downvotes') {
     aggregationPipeline.push({
-      $sort: sort === 'upvote' ? { upvoteCount: -1 } : { downvoteCount: 1 },
+      $sort: sort === 'upvotes' ? { upvoteCount: -1 } : { downvoteCount: 1 },
     } as any);
   }
 
+  if (category) {
+    aggregationPipeline.push({
+      $match: { category },
+    } as any);
+  }
   const result = await Post.aggregate(aggregationPipeline);
 
   if (!result || result.length === 0) {

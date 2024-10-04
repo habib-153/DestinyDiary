@@ -1,8 +1,8 @@
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { loginUser, registerUser } from "../services/AuthService";
+import { getMyProfile, loginUser, registerUser } from "../services/AuthService";
 
 export const useUserRegistration = () => {
   return useMutation<any, Error, FieldValues>({
@@ -27,5 +27,12 @@ export const useUserLogin = () => {
     onError: (error) => {
       toast.error(error.message);
     },
+  });
+};
+
+export const useGetMyProfile = () => {
+  return useQuery({
+    queryKey: ['myProfile'],
+    queryFn: async () => await getMyProfile(),
   });
 };

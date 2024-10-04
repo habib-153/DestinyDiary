@@ -83,3 +83,10 @@ export const getNewAccessToken = async () => {
     throw new Error("Failed to get new access token");
   }
 };
+
+export const getMyProfile = async () => {
+
+  const res = await axiosInstance.get(`/profile`);
+
+  return res.data;
+};

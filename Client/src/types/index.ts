@@ -38,6 +38,16 @@ export interface IUser {
   status: string;
   mobileNumber: string;
   profilePhoto: string;
+  followers: [IUser];
+  following: [IUser];
+  isVerified: boolean;
+  postCount: number;
+  totalUpVotes: number;
+  paymentStatus?: string;
+  transactionId?: string;
+  premiumStart?: string;
+  premiumEnd?: string;
+  premiumCharge?: number;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;

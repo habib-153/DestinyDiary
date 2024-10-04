@@ -43,7 +43,7 @@ const Posts = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchInput);
-    }, 300);
+    }, 800);
 
     return () => {
       clearTimeout(handler);
@@ -73,7 +73,7 @@ const Posts = () => {
   const posts = postData?.data
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto py-8">
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold mb-2">Travel Posts</h1>
         <p className="">Discover and share travel experiences</p>

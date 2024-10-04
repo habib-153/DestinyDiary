@@ -16,6 +16,12 @@ export type TUser = {
   following?: Types.ObjectId[];
   isVerified?: boolean;
   totalUpVotes?: number;
+  postCount?: number;
+  paymentStatus?: string;
+  transactionId?: string;
+  premiumStart?: Date;
+  premiumEnd?: Date;
+  premiumCharge?: number;
   createdAt?: Date;
   updatedAt?: Date;
 };

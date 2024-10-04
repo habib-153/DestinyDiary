@@ -46,6 +46,45 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: String,
       default: null
     },
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    totalUpVotes: {
+      type: Number,
+      default: 0,
+    },
+    postCount: {
+      type: Number,
+      default: 0,
+    },
+    paymentStatus: {
+      type: String,
+    },
+    transactionId: {
+      type: String,
+    },
+    premiumStart: {
+      type: Date,
+    },
+    premiumEnd: {
+      type: Date,
+    },
+    premiumCharge: {
+      type: Number,
+    }
   },
   {
     timestamps: true,
