@@ -57,14 +57,6 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
   }
 
-  // checking if the user is blocked
-
-  const userStatus = user?.status;
-
-  if (userStatus === 'BLOCKED') {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!');
-  }
-
   //checking if the password is correct
 
   if (!(await User.isPasswordMatched(payload?.password, user?.password)))
@@ -112,12 +104,6 @@ const changePassword = async (
 
   // checking if the user is blocked
 
-  const userStatus = user?.status;
-
-  if (userStatus === 'BLOCKED') {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!');
-  }
-
   //checking if the password is correct
 
   if (!(await User.isPasswordMatched(payload.oldPassword, user?.password)))
@@ -159,12 +145,6 @@ const refreshToken = async (token: string) => {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
   }
 
-  // checking if the user is blocked
-  const userStatus = user?.status;
-
-  if (userStatus === 'BLOCKED') {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!');
-  }
 
   if (
     user.passwordChangedAt &&

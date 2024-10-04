@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import httpStatus from 'http-status';
 import { QueryBuilder } from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
@@ -5,6 +6,7 @@ import { UserSearchableFields } from './user.constant';
 import { TUser } from './user.interface';
 import { User } from './user.model';
 import mongoose from 'mongoose';
+import { initiatePayment } from '../../utils/payment';
 
 const createUser = async (payload: TUser) => {
   const user = await User.create(payload);
@@ -31,14 +33,24 @@ const getSingleUserFromDB = async (id: string) => {
   return user;
 };
 
-const addFollowingInDB = async (userData: Record<string, unknown>, followingId: string) => {
+const addFollowingInDB = async (
+  userData: Record<string, unknown>,
+  followingId: string
+) => {
   const { email, _id } = userData;
 
   const user = await User.isUserExistsByEmail(email as string);
   if (!user) throw new AppError(httpStatus.NOT_FOUND, "User doesn't exist!");
 
-  const isAlreadyFollowing = await User.findOne({ _id, following: followingId });
-  if (isAlreadyFollowing) throw new AppError(httpStatus.BAD_REQUEST, 'Already following this profile!');
+  const isAlreadyFollowing = await User.findOne({
+    _id,
+    following: followingId,
+  });
+  if (isAlreadyFollowing)
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'Already following this profile!'
+    );
 
   const session = await mongoose.startSession();
   try {
@@ -63,14 +75,24 @@ const addFollowingInDB = async (userData: Record<string, unknown>, followingId: 
   }
 };
 
-const removeFollowingFromDB = async (userData: Record<string, unknown>, followingId: string) => {
+const removeFollowingFromDB = async (
+  userData: Record<string, unknown>,
+  followingId: string
+) => {
   const { email, _id } = userData;
 
   const user = await User.isUserExistsByEmail(email as string);
   if (!user) throw new AppError(httpStatus.NOT_FOUND, "User doesn't exist!");
 
-  const isAlreadyFollowing = await User.findOne({ _id, following: followingId });
-  if (!isAlreadyFollowing) throw new AppError(httpStatus.BAD_REQUEST, 'You are not following this profile!');
+  const isAlreadyFollowing = await User.findOne({
+    _id,
+    following: followingId,
+  });
+  if (!isAlreadyFollowing)
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'You are not following this profile!'
+    );
 
   const session = await mongoose.startSession();
   try {
@@ -94,10 +116,60 @@ const removeFollowingFromDB = async (userData: Record<string, unknown>, followin
     session.endSession();
   }
 };
+
+const getVerified = async (
+  payload: Partial<TUser>,
+  userData: Record<string, unknown>
+) => {
+  const { email, _id } = userData;
+
+  const user = await User.isUserExistsByEmail(email as string);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User doesn't exist!");
+  }
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const transactionId = `TXN-${Date.now()}`
+
+    const userInfo = {
+      ...payload,
+      transactionId
+    };
+
+    const result = await User.findByIdAndUpdate(_id, userInfo, {
+      new: true,
+    });
+
+    const paymentData = {
+      transactionId: transactionId,
+      amount: payload?.premiumCharge,
+      customerName: user.name,
+      customerEmail: user.email,
+      customerMobile: user.mobileNumber,
+    };
+
+    const payment = await initiatePayment(paymentData);
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return { payment, result };
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+  }
+};
+
 export const UserServices = {
   createUser,
   getAllUsersFromDB,
   getSingleUserFromDB,
   addFollowingInDB,
   removeFollowingFromDB,
+  getVerified,
 };

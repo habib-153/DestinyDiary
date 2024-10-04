@@ -19,3 +19,4 @@ router.get('/', auth(USER_ROLE.ADMIN), UserControllers.getAllUsers);
 router.get('/:id', UserControllers.getSingleUser);
 router.patch('/follow/:followingId', auth(USER_ROLE.USER), UserControllers.followUser);
 router.patch('/unfollow/:followingId', auth(USER_ROLE.USER), UserControllers.unfollowUser);
+router.put('/get-verified', auth(USER_ROLE.USER, USER_ROLE.ADMIN), UserControllers.getVerified);

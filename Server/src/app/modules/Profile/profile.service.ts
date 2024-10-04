@@ -2,14 +2,12 @@ import { JwtPayload } from "jsonwebtoken";
 import { User } from "../User/user.model";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
-import { USER_STATUS } from "../User/user.constant";
 import { TImageFile } from "../../interfaces/image.interface";
 import { TUserProfileUpdate } from "./profile.interface";
 
 const getMyProfile = async (user: JwtPayload) => {
     const profile = await User.findOne({
         email: user.email,
-        status: USER_STATUS.ACTIVE
     })
     .populate({
         path: 'followers',
@@ -19,7 +17,7 @@ const getMyProfile = async (user: JwtPayload) => {
         path: 'following',
         select: 'name email profilePhoto status isVerified',
     });
-    
+
     if (!profile) {
         throw new AppError(httpStatus.NOT_FOUND, "User does not exixts!")
     };
@@ -34,7 +32,6 @@ const updateMyProfile = async (
 ) => {
     const filter = {
         email: user.email,
-        status: USER_STATUS.ACTIVE
     };
 
     const profile = await User.findOne(filter);

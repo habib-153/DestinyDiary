@@ -59,15 +59,27 @@ const unfollowUser = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'You have unfollowed this profile',
+    message: 'You unfollow this profile',
     data: result,
   });
 })
+
+const getVerified = catchAsync(async (req, res) => {
+  const result = await UserServices.getVerified(req.body, req.user);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Please Pay the amount to get verified',
+    data: result
+  });
+});
 
 export const UserControllers = {
   getSingleUser,
   userRegister,
   getAllUsers,
   followUser,
-  unfollowUser
+  unfollowUser,
+  getVerified
 };
