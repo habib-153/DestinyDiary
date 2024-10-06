@@ -12,6 +12,7 @@ import { IPost, IUser } from "@/src/types";
 import { useGetAllPosts } from "@/src/hooks/post.hook";
 import envConfig from "@/src/config/envConfig";
 import PostCard from "@/src/components/UI/PostCard";
+import VerifyModal from "@/src/components/UI/modal/ProfileVerify/ProfileVerify";
 
 const ProfilePage = ({ user }: { user: IUser }) => {
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
@@ -42,23 +43,21 @@ const ProfilePage = ({ user }: { user: IUser }) => {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Profile Image Section */}
           <div className="md:w-1/4">
-            <div className="relative">
+            <div className="relative w-36 mx-auto">
               <Avatar
-                className="w-24 my-auto h-auto aspect-square"
+                className="w-full my-auto h-auto aspect-square"
                 imgProps={{
                   className: "object-cover",
                 }}
                 src={profilePhoto}
               />
-              {status === "BASIC" && (
-                <Chip
-                  className="absolute top-4 right-4"
-                  color="warning"
-                  variant="shadow"
-                >
-                  PREMIUM
-                </Chip>
-              )}
+              <Chip
+                className="absolute top-0 -right-3"
+                color={status === "PREMIUM" ? "warning" : "primary"}
+                variant="shadow"
+              >
+                {status}
+              </Chip>
             </div>
           </div>
 
@@ -105,7 +104,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
                 </div>
               </div>
               <div>
-                {!isVerified && totalUpVotes > 1 && (
+                {!isVerified && totalUpVotes >= 0 && (
                   <Button
                     color="primary"
                     startContent={<BadgeCheck className="w-4 h-4" />}
@@ -207,14 +206,14 @@ const ProfilePage = ({ user }: { user: IUser }) => {
             setOpenModal={setOpenEditProfileModal}
             user={user}
           />
-        )}
+        )}*/}
   
         {openVerifyProfileModal && (
           <VerifyModal
-            openModal={openVerifyProfileModal}
-            setOpenModal={setOpenVerifyProfileModal}
+            isOpen={openVerifyProfileModal}
+            onOpenChange={setOpenVerifyProfileModal}
           />
-        )} */}
+        )} 
     </div>
   );
 };

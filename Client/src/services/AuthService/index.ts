@@ -1,4 +1,4 @@
-'use server'
+"use server";
 
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
@@ -7,22 +7,21 @@ import { jwtDecode } from "jwt-decode";
 import axiosInstance from "@/src/libs/AxiosInstance";
 
 export const registerUser = async (userData: FieldValues) => {
-    try {
-      const { data } = await axiosInstance.post("/auth/register", userData);
-  //console.log("Data from registerUser: ", data);
-  
-      if (data.success) {
-        cookies().set("accessToken", data?.data?.accessToken);
-        cookies().set("refreshToken", data?.data?.refreshToken);
-      }
-  
-      return data;
-    } catch (error: any) {
-      throw new Error(error);
-    }
-  };
+  try {
+    const { data } = await axiosInstance.post("/auth/register", userData);
+    //console.log("Data from registerUser: ", data);
 
-  
+    if (data.success) {
+      cookies().set("accessToken", data?.data?.accessToken);
+      cookies().set("refreshToken", data?.data?.refreshToken);
+    }
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
 export const loginUser = async (userData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post("/auth/login", userData);
@@ -85,8 +84,17 @@ export const getNewAccessToken = async () => {
 };
 
 export const getMyProfile = async () => {
-
   const res = await axiosInstance.get(`/profile`);
 
   return res.data;
+};
+
+export const getVerified = async (payload: any) => {
+  try {
+    const { data } = await axiosInstance.put("/users/get-verified", payload);
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
 };
