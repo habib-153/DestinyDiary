@@ -13,6 +13,7 @@ import { useGetAllPosts } from "@/src/hooks/post.hook";
 import envConfig from "@/src/config/envConfig";
 import PostCard from "@/src/components/UI/PostCard";
 import VerifyModal from "@/src/components/UI/modal/ProfileVerify/ProfileVerify";
+import UpdateProfileModal from "@/src/components/UI/modal/ProfileVerify/UpdateProfileModal";
 
 const ProfilePage = ({ user }: { user: IUser }) => {
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
@@ -36,6 +37,10 @@ const ProfilePage = ({ user }: { user: IUser }) => {
 
   const { data: postData } = useGetAllPosts(apiUrl);
   const posts = postData?.data;
+
+  const isFollowing = (followerId: string) => {
+    return following?.some((followedUser) => followedUser._id === followerId);
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -150,16 +155,22 @@ const ProfilePage = ({ user }: { user: IUser }) => {
             }
           >
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-              {/* Render followers here */}
-              {followers?.map((follower, index) => (
+            {followers?.map((follower, index) => (
                 <Card key={index} className="p-4">
                   <div className="flex items-center gap-3">
-                    <Avatar size="lg" src={follower.profilePhoto} />
+                    <Avatar size="lg" src={follower?.profilePhoto} />
                     <div>
-                      <p className="font-semibold">{follower.name}</p>
-                      <Button color="primary" size="sm" variant="flat">
-                        Follow Back
-                      </Button>
+                    <p className="font-semibold flex gap-2 items-center">
+                        {follower?.name}
+                        {isVerified && (
+                          <BadgeCheck className="w-6 h-6 text-primary" />
+                        )}
+                      </p>
+                      {!isFollowing(follower?._id) && (
+                        <Button color="primary" size="sm" variant="flat">
+                          Follow Back
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </Card>
@@ -180,10 +191,10 @@ const ProfilePage = ({ user }: { user: IUser }) => {
               {following?.map((followedUser, index) => (
                 <Card key={index} className="p-4">
                   <div className="flex items-center gap-3">
-                    <Avatar size="lg" src={followedUser.profilePhoto} />
+                    <Avatar size="lg" src={followedUser?.profilePhoto} />
                     <div className="space-y-1">
                       <p className="font-semibold flex gap-2 items-center">
-                        {followedUser.name}
+                        {followedUser?.name}
                         {isVerified && (
                           <BadgeCheck className="w-6 h-6 text-primary" />
                         )}
@@ -200,13 +211,13 @@ const ProfilePage = ({ user }: { user: IUser }) => {
         </Tabs>
       </div>
 
-      {/* {openEditProfileModal && (
-          <ProfileEditModal
-            openModal={openEditProfileModal}
-            setOpenModal={setOpenEditProfileModal}
+      {openEditProfileModal && (
+          <UpdateProfileModal
+            isOpen={openEditProfileModal}
             user={user}
+            onOpenChange={setOpenEditProfileModal}
           />
-        )}*/}
+        )}
   
         {openVerifyProfileModal && (
           <VerifyModal

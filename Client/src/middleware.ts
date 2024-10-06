@@ -12,7 +12,7 @@ const roleBasedRoutes = {
 };
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
 
   const user = await getCurrentUser();
 
@@ -21,9 +21,13 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     } else {
       return NextResponse.redirect(
-        new URL(`/login?redirect=${pathname}`, request.url)
+        new URL(`/login?redirect=${pathname}${search}`, request.url)
       );
     }
+  }
+
+  if (pathname === "/postDetails" || pathname === "/profile") {
+    return NextResponse.next();
   }
 
   if (user?.role && roleBasedRoutes[user?.role as Role]) {
@@ -41,6 +45,8 @@ export const config = {
   matcher: [
     "/login",
     "/register",
+    "/postDetails",
+    "/profile",
     "/user-dashboard/:page*",
     "/admin-dashboard/:page*",
   ],

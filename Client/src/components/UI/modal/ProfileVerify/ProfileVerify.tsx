@@ -10,7 +10,6 @@ import { useUser } from "@/src/context/user.provider";
 import { updateAccessTokenInCookies } from "@/src/utils/updateAccessToken";
 import { useGetVerified } from "@/src/hooks/user.hook";
 
-
 interface VerifyModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -21,12 +20,12 @@ const VerifyModal = ({ isOpen, onOpenChange }: VerifyModalProps) => {
 
   const handleSuccess = (data: any) => {
     toast.dismiss();
-    console.log(data?.data);
+    // console.log(data?.data);
     if (data?.data?.payment?.result) {
       //toast.success("Subscribed to Premium plan successfully!");
       window.location.href = data?.data?.payment?.payment_url;
     }
-    console.log(data?.data?.result);
+    // console.log(data?.data?.data);
     updateProfile(data?.data?.result);
     updateAccessTokenInCookies(data.data?.result);
   };
@@ -51,7 +50,7 @@ const VerifyModal = ({ isOpen, onOpenChange }: VerifyModalProps) => {
     } catch (error) {
       toast.dismiss();
       toast.error("An error occurred while processing the payment");
-      console.error("Client Error:", error);
+      //console.error("Client Error:", error);
     }
   };
 

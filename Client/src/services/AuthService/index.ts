@@ -5,6 +5,7 @@ import { FieldValues } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
 
 import axiosInstance from "@/src/libs/AxiosInstance";
+import { IUser } from "@/src/types";
 
 export const registerUser = async (userData: FieldValues) => {
   try {
@@ -96,5 +97,20 @@ export const getVerified = async (payload: any) => {
     return data;
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const updateUser = async (payload : FormData) => {
+  try {
+    const { data } = await axiosInstance.patch(`/profile`, payload);
+
+    return data;
+  } catch (error: any) {
+    const errorMessage =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Unknown error occurred";
+
+    throw new Error(errorMessage);
   }
 };
