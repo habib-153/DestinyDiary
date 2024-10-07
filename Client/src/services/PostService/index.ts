@@ -5,13 +5,12 @@ import { revalidateTag } from "next/cache";
 import { getCurrentUser } from "../AuthService";
 
 import axiosInstance from "@/src/libs/AxiosInstance";
-import envConfig from "@/src/config/envConfig";
 
 export const createPost = async(data: FormData) => {
     try {
         const response = await axiosInstance.post("/posts", data);
 
-        revalidateTag("/posts");
+        revalidateTag("posts");
         
         return response.data;
     } catch (error: any) {

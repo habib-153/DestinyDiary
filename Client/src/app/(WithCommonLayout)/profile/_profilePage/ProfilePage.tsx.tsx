@@ -43,16 +43,16 @@ const ProfilePage = ({ user }: { user: IUser }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto py-8">
       <Card className="p-6">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Profile Image Section */}
           <div className="md:w-1/4">
             <div className="relative w-36 mx-auto">
               <Avatar
-                className="w-full my-auto h-auto aspect-square"
+                className="w-full my-auto h-full aspect-square"
                 imgProps={{
-                  className: "object-cover",
+                  className: "object-cover h-full",
                 }}
                 src={profilePhoto}
               />

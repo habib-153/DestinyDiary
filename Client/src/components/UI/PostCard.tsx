@@ -4,6 +4,7 @@ import { Image } from "@nextui-org/image";
 import { Avatar } from "@nextui-org/avatar";
 import { Chip } from "@nextui-org/chip";
 import { ThumbsDown, ThumbsUp, Crown } from "lucide-react";
+import parse from "html-react-parser";
 
 import { IPost } from "@/src/types";
 
@@ -19,11 +20,9 @@ const PostCard = ({ post }: { post: IPost }) => {
     downvoteCount
   } = post || {};
 
-  const truncateDescription = (text: string, wordLimit: number) => {
-    const words = text.split(' ');
-
-    if (words.length > wordLimit) {
-      return words.slice(0, wordLimit).join(' ') + '...';
+  const truncateDescription = (text: string, charLimit: number) => {
+    if (text.length > charLimit) {
+      return text.slice(0, charLimit) + '...';
     }
 
     return text;
@@ -53,7 +52,7 @@ const PostCard = ({ post }: { post: IPost }) => {
           <h2 className="text-xl font-semibold">{title}</h2>
           <Chip color="primary" variant="flat">{category}</Chip>
         </div>
-        <p className="text-gray-500">{truncateDescription(description, 20)}</p>
+        <p className="text-gray-500">{parse(truncateDescription(description, 150))}</p>
       </CardBody>
       <CardFooter className="flex justify-between items-center">
         <div className="flex items-center gap-2">

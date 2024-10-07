@@ -16,6 +16,9 @@ import PostCard from "@/src/components/UI/PostCard";
 import envConfig from "@/src/config/envConfig";
 import { useGetAllPosts } from "@/src/hooks/post.hook";
 import { IPost } from "@/src/types";
+import { useUser } from "@/src/context/user.provider";
+import AuthModal from "@/src/components/UI/modal/AuthModal/AuthModal";
+import CreatePostModal from "@/src/components/UI/modal/PostModals/CreatePostModal";
 
 const Categories = [
   "Adventure",
@@ -33,11 +36,14 @@ const SortOptions = [
 ];
 
 const Posts = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [openAuthModal, setOpenAuthModal] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [filterApplied, setFilterApplied] = useState(false);
+  const {user} = useUser()
 
   // Debounce implementation
   useEffect(() => {
@@ -73,7 +79,10 @@ const Posts = () => {
   const posts = postData?.data
 
   return (
-    <div className="max-w-7xl mx-auto py-8">
+    <div className="max-w-7xl relative mx-auto py-5">
+      <div className="w-full text-right absolute -top-5 sm:top-5">
+        <Button className="bg-black text-white font-medium" onClick={() => (user ? setOpenModal(true) : setOpenAuthModal(true))}>Create A Post</Button>
+      </div>
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold mb-2">Travel Posts</h1>
         <p className="">Discover and share travel experiences</p>
@@ -167,6 +176,18 @@ const Posts = () => {
             <PostCard key={index} post={post} />
           ))}
       </div>
+      {openAuthModal && (
+        <AuthModal
+          openAuthModal={openAuthModal}
+          setOpenAuthModal={setOpenAuthModal}
+        />
+      )}
+      {openModal && (
+        <CreatePostModal
+          isOpen={openModal}
+          setIsOpen={setOpenModal}
+        />
+      )}
     </div>
   );
 };
