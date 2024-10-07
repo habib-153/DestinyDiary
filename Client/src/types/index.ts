@@ -24,10 +24,10 @@ export interface IPost {
   category: TPostCategory;
   author?: IUser;
   status: keyof typeof POST_STATUS;
-  upVotes?: number;
+  upVotes?: [IUser];
   upvoteCount?: number;
   downvoteCount?: number;
-  downVotes?: number;
+  downVotes?: [IUser];
 }
 
 export interface IUser {

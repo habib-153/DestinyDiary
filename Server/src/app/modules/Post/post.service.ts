@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import { TPost } from './post.interface';
@@ -61,6 +59,22 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
         downvoteCount: { $size: '$downVotes' },
       },
     },
+    {
+      $lookup:{
+        from: 'users',
+        localField: 'upVotes',
+        foreignField: '_id',
+        as: 'upVotes'
+      }
+    },
+    {
+      $lookup:{
+        from: 'users',
+        localField: 'downVotes',
+        foreignField: '_id',
+        as: 'downVotes'
+      }
+    }
   ];
 
   if (searchTerm) {
@@ -88,7 +102,7 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
       $match: { category },
     } as any);
   }
-  const result = await Post.aggregate(aggregationPipeline);
+  const result = await Post.aggregate(aggregationPipeline)
 
   if (!result || result.length === 0) {
     return null;

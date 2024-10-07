@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { createPost, getAllPosts } from "../services/PostService";
+import { addDownvote, addUpvote, createPost, getAllPosts, getSinglePost, removeDownvote, removeUpvote } from "../services/PostService";
 
 export const useCreatePost = () => {
   return useMutation<any, Error, FormData>({
@@ -24,62 +24,62 @@ export const useGetAllPosts = (apiUrl: string) => {
   });
 };
 
-// export const useGetSinglePost = (id: string) => {
-//   return useQuery({
-//     queryKey: ["singlePost", id],
-//     queryFn: async () => await getSinglePost(id),
-//     enabled: !!id, // Only fetch if id is truthy
-//   });
-// };
+export const useGetSinglePost = (id: string) => {
+  return useQuery({
+    queryKey: ["singlePost", id],
+    queryFn: async () => await getSinglePost(id),
+    enabled: !!id, 
+  });
+};
 
-// export const useAddUpvotePost = () => {
-//   return useMutation<any, Error, { id: string }>({
-//     mutationKey: ["ADD_UPVOTE_POST"],
-//     mutationFn: async ({ id }) => {
-//       return toast.promise(addUpvote(id), {
-//         loading: "Upvoting post...",
-//         success: `You upvoted this post!`,
-//         error: "Error when upvoting post.",
-//       });
-//     },
-//   });
-// };
+export const useAddUpVotePost = () => {
+  return useMutation<any, Error, { id: string }>({
+    mutationKey: ["ADD_UPVOTE_POST"],
+    mutationFn: async ({ id }) => {
+      return toast.promise(addUpvote(id), {
+        loading: "UpVoting post...",
+        success: `You upVoted this post!`,
+        error: "Error when upVoting post.",
+      });
+    },
+  });
+};
 
-// export const useRemoveUpvotePost = () => {
-//   return useMutation<any, Error, { id: string }>({
-//     mutationKey: ["REMOVE_UPVOTE_POST"],
-//     mutationFn: async ({ id }) => {
-//       return toast.promise(removeUpvote(id), {
-//         loading: "Removing upvote post...",
-//         success: `You removed upvoting this post!`,
-//         error: "Error when upvoting post.",
-//       });
-//     },
-//   });
-// };
+export const useRemoveUpVoteFromPost = () => {
+  return useMutation<any, Error, { id: string }>({
+    mutationKey: ["REMOVE_UPVOTE_POST"],
+    mutationFn: async ({ id }) => {
+      return toast.promise(removeUpvote(id), {
+        loading: "Removing upvote post...",
+        success: `You remove upVote from this post!`,
+        error: "Error when upVoting post.",
+      });
+    },
+  });
+};
 
-// export const useAddDownvotePost = () => {
-//   return useMutation<any, Error, { id: string }>({
-//     mutationKey: ["ADD_DOWNVOTE_POST"],
-//     mutationFn: async ({ id }) => {
-//       return toast.promise(addDownvote(id), {
-//         loading: "Downvoting post...",
-//         success: `You downvoted this post!`,
-//         error: "Error when downvoting post.",
-//       });
-//     },
-//   });
-// };
+export const useAddDownVotePost = () => {
+  return useMutation<any, Error, { id: string }>({
+    mutationKey: ["ADD_DOWNVOTE_POST"],
+    mutationFn: async ({ id }) => {
+      return toast.promise(addDownvote(id), {
+        loading: "DownVoting post...",
+        success: `You downVoted this post!`,
+        error: "Error when downVoting post.",
+      });
+    },
+  });
+};
 
-// export const useRemoveDownvotePost = () => {
-//   return useMutation<any, Error, { id: string }>({
-//     mutationKey: ["REMOVE_UPVOTE_POST"],
-//     mutationFn: async ({ id }) => {
-//       return toast.promise(removeDownvote(id), {
-//         loading: "Removing downvote post...",
-//         success: `You removed downvoting this post!`,
-//         error: "Error when downvoting post.",
-//       });
-//     },
-//   });
-// };
+export const useRemoveDownVoteFromPost = () => {
+  return useMutation<any, Error, { id: string }>({
+    mutationKey: ["REMOVE_UPVOTE_POST"],
+    mutationFn: async ({ id }) => {
+      return toast.promise(removeDownvote(id), {
+        loading: "Removing downvote post...",
+        success: `You removed downvote from this post!`,
+        error: "Error when downVoting post.",
+      });
+    },
+  });
+};

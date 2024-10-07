@@ -32,8 +32,8 @@ router.put(
 
 router.delete('/:id', auth(USER_ROLE.USER), PostControllers.deletePost);
 router.post('/:postId/upvote', auth(USER_ROLE.USER), PostControllers.addPostUpvote);
-router.post('/:id/downvote', auth(USER_ROLE.USER), PostControllers.addPostDownvote);
-router.delete('/:id/upvote', auth(USER_ROLE.USER), PostControllers.removePostUpvote);
-router.delete('/:id/downvote', auth(USER_ROLE.USER), PostControllers.removePostDownvote);
+router.post('/:postId/downvote', auth(USER_ROLE.USER), PostControllers.addPostDownvote);
+router.delete('/:postId/upvote', auth(USER_ROLE.USER), PostControllers.removePostUpvote);
+router.delete('/:postId/downvote', auth(USER_ROLE.USER), PostControllers.removePostDownvote);
 
 export const PostRoutes = router;
