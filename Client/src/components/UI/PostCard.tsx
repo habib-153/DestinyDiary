@@ -25,13 +25,16 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
-import { useAddDownVotePost, useAddUpVotePost, useRemoveDownVoteFromPost, useRemoveUpVoteFromPost } from "@/src/hooks/post.hook";
+import { useAddDownVotePost, useAddUpVotePost, useDeletePost, useRemoveDownVoteFromPost, useRemoveUpVoteFromPost } from "@/src/hooks/post.hook";
 
-const PostCard = ({ post }: { post: IPost }) => {
+const PostCard = ({ post, full }: { post: IPost, full: boolean }) => {
   const { user } = useUser();
+  const router = useRouter()
+  const {mutate: deletePost} = useDeletePost()
   const {mutate: upVotePost} = useAddUpVotePost()
   const {mutate: downVotePost} = useAddDownVotePost()
   const {mutate: removeUpVoteFormPost} = useRemoveUpVoteFromPost()
@@ -68,19 +71,23 @@ const PostCard = ({ post }: { post: IPost }) => {
     return downVotes?.some((user) => user._id === userId);
   };
 
-  const handleUpVote = (postId: string, cond: boolean) => {
+  const handleUpVote = async(postId: string, cond: boolean) => {
     if (cond) {
       removeUpVoteFormPost({id: postId})
+      
     } else {
       upVotePost({id: postId})
+      
     }
   };
 
   const handleDownVote = (postId: string, cond: boolean) => {
     if (cond) {
       removeDownVoteFormPost({id: postId})
+      
     } else {
       downVotePost({id: postId})
+      
     }
   };
 
@@ -89,12 +96,13 @@ const PostCard = ({ post }: { post: IPost }) => {
   };
 
   const handleDelete = (postId: string) => {
-    // Implement delete logic, e.g., open confirmation modal
+    deletePost({id : postId})
+    
+    router.push('/posts')
   };
 
   const isPremiumUser = user?.status === "PREMIUM";
-  console.log("isPremiumUser", isPremiumUser);
-
+ 
   return (
     <NextUiCard className="cursor-pointer hover:shadow-lg transition-shadow">
       <CardHeader className="justify-between">
@@ -170,13 +178,16 @@ const PostCard = ({ post }: { post: IPost }) => {
           <Link href={`/posts/${_id}`}>
           <CardBody className="px-3 py-0">
             <h2 className="text-xl font-bold mb-2">{title}</h2>
-            <Image
+            <div className="w-full flex justify-center">
+               <Image
               alt={title}
-              className="w-full sm:h-[370px] rounded-xl mb-3"
+              className={`${!full ? 'h-[370px]' : 'w-full'} rounded-xl mb-3`}
               src={image}
+              width={full ? '80%' : '100%'}
             />
+            </div>
             <div className="text-small text-default-400">
-              {parse(truncateDescription(description, 150))}
+              {full ? parse(description) : parse(truncateDescription(description, 150))}
             </div>
           </CardBody>
         </Link>

@@ -19,6 +19,7 @@ import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
 import AuthModal from "@/src/components/UI/modal/AuthModal/AuthModal";
 import CreatePostModal from "@/src/components/UI/modal/PostModals/CreatePostModal";
+import PostCardSkeleton from "@/src/components/UI/PostCardSkeleton";
 
 const Categories = [
   "Adventure",
@@ -75,7 +76,7 @@ const Posts = () => {
     ...(sort && { sort }),
   }).toString()}`;
 
-  const { data: postData } = useGetAllPosts(apiUrl);
+  const { data: postData, refetch } = useGetAllPosts(apiUrl);
   const posts = postData?.data
 
   return (
@@ -171,10 +172,14 @@ const Posts = () => {
       </Card>
 
       <div className="my-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {posts &&
+        {posts ?
           posts?.map((post : IPost, index: number) => (
-            <PostCard key={index} post={post} />
-          ))}
+            <PostCard key={index} full={false} post={post} refetch={refetch} />
+          ))
+          :
+          Array.from({ length: 2 }).map((_, index) => (
+            <PostCardSkeleton key={index} />))
+        }
       </div>
       {openAuthModal && (
         <AuthModal

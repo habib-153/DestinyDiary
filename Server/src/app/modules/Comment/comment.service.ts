@@ -12,7 +12,7 @@ const getAllCommentOfAPost = async (
   query: Record<string, unknown>,
   postId: string
 ) => {
-  const comments = new QueryBuilder(Comment.find({ post: postId }), query)
+  const comments = new QueryBuilder(Comment.find({ post: postId }).populate([{ path: 'user' }, { path: 'post' }]), query)
     .paginate()
     .sort()
     .filter();

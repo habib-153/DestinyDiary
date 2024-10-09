@@ -17,23 +17,6 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
   return result;
 };
 
-// const getAllPostsFromDB = async (query: Record<string, unknown>) => {
-//   const postQuery = new QueryBuilder(Post.find(), query)
-//     .search(postSearchableFields)
-//     .filter()
-//     .sort()
-//     .paginate()
-//     .fields();
-
-//   const meta = await postQuery.countTotal();
-//   const result = await postQuery.modelQuery;
-
-//   if (result.length === 0) {
-//     return null;
-//   }
-
-//   return { meta, result };
-// };
 const getAllPostsFromDB = async (query: Record<string, unknown>) => {
   const { sort, searchTerm, category } = query;
 
@@ -112,8 +95,53 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSinglePostFromDB = async (id: string) => {
-  const result = await Post.findById(id).populate('author');
-  return result;
+  const aggregationPipeline: any[] = [
+    {
+      $match: {
+        _id: new Types.ObjectId(id),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'author',
+        foreignField: '_id',
+        as: 'author',
+      },
+    },
+    {
+      $unwind: {
+        path: '$author',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        upvoteCount: { $size: '$upVotes' },
+        downvoteCount: { $size: '$downVotes' },
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'upVotes',
+        foreignField: '_id',
+        as: 'upVotes',
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'downVotes',
+        foreignField: '_id',
+        as: 'downVotes',
+      },
+    },
+  ];
+
+  const result = await Post.aggregate(aggregationPipeline);
+
+  return result.length > 0 ? result[0] : null;
 };
 
 const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {

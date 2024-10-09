@@ -52,3 +52,11 @@ export interface IUser {
   updatedAt?: string;
   __v?: number;
 }
+
+export interface IComment {
+  _id?: string
+  user?: IUser;
+  post: string;
+  comment: string;
+  createdAt?: string;
+}
