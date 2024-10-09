@@ -88,7 +88,13 @@ export const useRemoveDownVoteFromPost = () => {
 export const useUpdatePost = () => {
   return useMutation<any, Error, { postData : FormData; id: string }>({
     mutationKey: ["UPDATE_POST"],
-    mutationFn: async ({ postData, id }) => await updatePost(postData, id),
+    mutationFn: async ({ postData, id }) => {
+      return toast.promise(updatePost(postData, id), {
+        loading: "Updating Post...",
+        success: "Post updated successfully!",
+        error: "Error when updating Post.",
+      });
+    },
   });
 };
 

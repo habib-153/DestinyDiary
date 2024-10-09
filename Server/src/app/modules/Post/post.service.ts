@@ -43,21 +43,21 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
       },
     },
     {
-      $lookup:{
+      $lookup: {
         from: 'users',
         localField: 'upVotes',
         foreignField: '_id',
-        as: 'upVotes'
-      }
+        as: 'upVotes',
+      },
     },
     {
-      $lookup:{
+      $lookup: {
         from: 'users',
         localField: 'downVotes',
         foreignField: '_id',
-        as: 'downVotes'
-      }
-    }
+        as: 'downVotes',
+      },
+    },
   ];
 
   if (searchTerm) {
@@ -85,7 +85,7 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
       $match: { category },
     } as any);
   }
-  const result = await Post.aggregate(aggregationPipeline)
+  const result = await Post.aggregate(aggregationPipeline);
 
   if (!result || result.length === 0) {
     return null;
@@ -144,26 +144,30 @@ const getSinglePostFromDB = async (id: string) => {
   return result.length > 0 ? result[0] : null;
 };
 
-const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {
+const updatePostIntoDB = async (
+  id: string,
+  payload: Partial<TPost>,
+  image: TImageFile
+) => {
   const postData = await Post.findById(id);
 
   if (!postData) {
     throw new AppError(httpStatus.NOT_FOUND, 'Post not found');
   }
 
+  if (image) {
+    payload.image = image.path;
+  }
+
   const result = await Post.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-  });
+    runValidators: true, new: true
+  })
+
   return result;
 };
 
 const deletePostFromDB = async (id: string) => {
-  const result = await Post.findByIdAndUpdate(
-    id,
-    { isDeleted: true },
-    { new: true }
-  );
+  const result = await Post.findByIdAndDelete(id, { isDeleted: true });
   return result;
 };
 

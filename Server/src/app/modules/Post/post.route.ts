@@ -25,8 +25,10 @@ router.get('/:id', PostControllers.getSinglePost);
 
 router.put(
   '/:id',
+  multerUpload.single('image'),
   auth(USER_ROLE.USER),
-  validateRequest(PostValidation.createPostValidationSchema),
+  parseBody,
+  validateRequest(PostValidation.updatePostValidationSchema),
   PostControllers.updatePost
 );
 

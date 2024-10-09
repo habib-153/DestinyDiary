@@ -24,7 +24,7 @@ export const useGetVerified = (onSuccessCallback: any) => {
   };
 
   export const useUpdateUser = () => {
-    const { user, updateProfile } = useUser();
+    const { updateProfile } = useUser();
   
     return useMutation<any, Error, FormData>({
       mutationKey: ["UPDATE_USER"],

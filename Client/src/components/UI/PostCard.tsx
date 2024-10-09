@@ -26,19 +26,29 @@ import {
 } from "@nextui-org/dropdown";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import UpdatePostModal from "./modal/PostModals/UpdatePostModal";
 
 import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
-import { useAddDownVotePost, useAddUpVotePost, useDeletePost, useRemoveDownVoteFromPost, useRemoveUpVoteFromPost } from "@/src/hooks/post.hook";
+import {
+  useAddDownVotePost,
+  useAddUpVotePost,
+  useDeletePost,
+  useRemoveDownVoteFromPost,
+  useRemoveUpVoteFromPost,
+} from "@/src/hooks/post.hook";
 
-const PostCard = ({ post, full }: { post: IPost, full: boolean }) => {
+const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
+  const [openEditModal, setOpenEditModal] = useState(false);
   const { user } = useUser();
-  const router = useRouter()
-  const {mutate: deletePost} = useDeletePost()
-  const {mutate: upVotePost} = useAddUpVotePost()
-  const {mutate: downVotePost} = useAddDownVotePost()
-  const {mutate: removeUpVoteFormPost} = useRemoveUpVoteFromPost()
-  const {mutate: removeDownVoteFormPost} = useRemoveDownVoteFromPost()
+  const router = useRouter();
+  const { mutate: deletePost } = useDeletePost();
+  const { mutate: upVotePost } = useAddUpVotePost();
+  const { mutate: downVotePost } = useAddDownVotePost();
+  const { mutate: removeUpVoteFormPost } = useRemoveUpVoteFromPost();
+  const { mutate: removeDownVoteFormPost } = useRemoveDownVoteFromPost();
 
   const {
     _id,
@@ -71,23 +81,19 @@ const PostCard = ({ post, full }: { post: IPost, full: boolean }) => {
     return downVotes?.some((user) => user._id === userId);
   };
 
-  const handleUpVote = async(postId: string, cond: boolean) => {
+  const handleUpVote = async (postId: string, cond: boolean) => {
     if (cond) {
-      removeUpVoteFormPost({id: postId})
-      
+      removeUpVoteFormPost({ id: postId });
     } else {
-      upVotePost({id: postId})
-      
+      upVotePost({ id: postId });
     }
   };
 
   const handleDownVote = (postId: string, cond: boolean) => {
     if (cond) {
-      removeDownVoteFormPost({id: postId})
-      
+      removeDownVoteFormPost({ id: postId });
     } else {
-      downVotePost({id: postId})
-      
+      downVotePost({ id: postId });
     }
   };
 
@@ -96,13 +102,13 @@ const PostCard = ({ post, full }: { post: IPost, full: boolean }) => {
   };
 
   const handleDelete = (postId: string) => {
-    deletePost({id : postId})
-    
-    router.push('/posts')
+    deletePost({ id: postId });
+
+    router.push("/posts");
   };
 
   const isPremiumUser = user?.status === "PREMIUM";
- 
+
   return (
     <NextUiCard className="cursor-pointer hover:shadow-lg transition-shadow">
       <CardHeader className="justify-between">
@@ -144,7 +150,7 @@ const PostCard = ({ post, full }: { post: IPost, full: boolean }) => {
                   startContent={<Edit className="w-4 h-4" />}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleEdit(_id as string);
+                    setOpenEditModal(true);
                   }}
                 >
                   Edit post
@@ -170,68 +176,74 @@ const PostCard = ({ post, full }: { post: IPost, full: boolean }) => {
         <CardBody className="px-3 py-0">
           <div className="flex flex-col items-center justify-center h-full">
             <Lock className="w-10 h-10 text-gray-400" />
-            <p className="text-gray-400">This post is only accessible to premium and verified users.</p>
+            <p className="text-gray-400">
+              This post is only accessible to premium and verified users.
+            </p>
           </div>
         </CardBody>
       ) : (
         <div>
           <Link href={`/posts/${_id}`}>
-          <CardBody className="px-3 py-0">
-            <h2 className="text-xl font-bold mb-2">{title}</h2>
-            <div className="w-full flex justify-center">
-               <Image
-              alt={title}
-              className={`${!full ? 'h-[370px]' : 'w-full'} rounded-xl mb-3`}
-              src={image}
-              width={full ? '80%' : '100%'}
-            />
-            </div>
-            <div className="text-small text-default-400">
-              {full ? parse(description) : parse(truncateDescription(description, 150))}
-            </div>
-          </CardBody>
-        </Link>
-        <CardFooter className="gap-3">
-        {isUpVoted(user?._id as string) ? (
-          <Button
-            color="primary"
-            startContent={<ThumbsUp className="w-4 h-4" />}
-            variant="solid"
-            onClick={() => {
-              handleUpVote(_id as string, true);
-            }}
-          >
-            {upvoteCount}
-          </Button>
-        ) : (
-          <Button
-            color="primary"
-            startContent={<ThumbsUp className="w-4 h-4" />}
-            variant="light"
-            onClick={() => {
-              handleUpVote(_id as string, false);
-            }}
-          >
-            {upvoteCount}
-          </Button>
-        )}
-        <Button
-          color="danger"
-          startContent={<ThumbsDown className="w-4 h-4" />}
-          variant={isDownVoted(user?._id as string) ? "solid" : "light"}
-          onClick={(e) => {
-            e.stopPropagation();
-            isDownVoted(user?._id as string)
-              ? handleDownVote(_id as string, true)
-              : handleDownVote(_id as string, false);
-          }}
-        >
-          {downvoteCount}
-        </Button>
-      </CardFooter>
+            <CardBody className="px-3 py-0">
+              <h2 className="text-xl font-bold mb-2">{title}</h2>
+              <div className="w-full flex justify-center">
+                <Image
+                  alt={title}
+                  className={`${!full ? "h-[370px]" : "w-full"} rounded-xl mb-3`}
+                  src={image}
+                  width={full ? "80%" : "100%"}
+                />
+              </div>
+              <div className="text-small text-default-400">
+                {full
+                  ? parse(description)
+                  : parse(truncateDescription(description, 150))}
+              </div>
+            </CardBody>
+          </Link>
+          <CardFooter className="gap-3">
+            {isUpVoted(user?._id as string) ? (
+              <Button
+                color="primary"
+                startContent={<ThumbsUp className="w-4 h-4" />}
+                variant="solid"
+                onClick={() => {
+                  handleUpVote(_id as string, true);
+                }}
+              >
+                {upvoteCount}
+              </Button>
+            ) : (
+              <Button
+                color="primary"
+                startContent={<ThumbsUp className="w-4 h-4" />}
+                variant="light"
+                onClick={() => {
+                  handleUpVote(_id as string, false);
+                }}
+              >
+                {upvoteCount}
+              </Button>
+            )}
+            <Button
+              color="danger"
+              startContent={<ThumbsDown className="w-4 h-4" />}
+              variant={isDownVoted(user?._id as string) ? "solid" : "light"}
+              onClick={(e) => {
+                e.stopPropagation();
+                isDownVoted(user?._id as string)
+                  ? handleDownVote(_id as string, true)
+                  : handleDownVote(_id as string, false);
+              }}
+            >
+              {downvoteCount}
+            </Button>
+          </CardFooter>
         </div>
       )}
-      
+      {
+        <UpdatePostModal  isOpen={openEditModal} post={post} setIsOpen={setOpenEditModal} />
+      }
     </NextUiCard>
   );
 };

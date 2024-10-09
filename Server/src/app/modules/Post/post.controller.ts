@@ -48,7 +48,8 @@ const getSinglePost = catchAsync(async (req, res) => {
 
 const updatePost = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await PostServices.updatePostIntoDB(id, req.body);
+
+  const result = await PostServices.updatePostIntoDB(id, req.body , req.file as TImageFile);
 
   sendResponse(res, {
     success: true,
