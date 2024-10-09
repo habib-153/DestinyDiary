@@ -58,6 +58,22 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
         as: 'downVotes',
       },
     },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'author.followers',
+        foreignField: '_id',
+        as: 'author.followers',
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'author.following',
+        foreignField: '_id',
+        as: 'author.following',
+      }
+    }
   ];
 
   if (searchTerm) {
@@ -137,6 +153,22 @@ const getSinglePostFromDB = async (id: string) => {
         as: 'downVotes',
       },
     },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'author.followers',
+        foreignField: '_id',
+        as: 'author.followers',
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'author.following',
+        foreignField: '_id',
+        as: 'author.following',
+      }
+    }
   ];
 
   const result = await Post.aggregate(aggregationPipeline);

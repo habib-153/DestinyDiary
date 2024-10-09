@@ -76,7 +76,7 @@ const Posts = () => {
     ...(sort && { sort }),
   }).toString()}`;
 
-  const { data: postData, refetch } = useGetAllPosts(apiUrl);
+  const { data: postData } = useGetAllPosts(apiUrl);
   const posts = postData?.data
 
   return (
@@ -174,7 +174,7 @@ const Posts = () => {
       <div className="my-10 grid grid-cols-1 md:grid-cols-2 gap-6">
         {posts ?
           posts?.map((post : IPost, index: number) => (
-            <PostCard key={index} full={false} post={post} refetch={refetch} />
+            <PostCard key={index} full={false} post={post} />
           ))
           :
           Array.from({ length: 2 }).map((_, index) => (

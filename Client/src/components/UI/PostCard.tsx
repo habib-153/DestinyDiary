@@ -39,6 +39,7 @@ import {
   useRemoveDownVoteFromPost,
   useRemoveUpVoteFromPost,
 } from "@/src/hooks/post.hook";
+import { useFollowUser, useUnfollowUser } from "@/src/hooks/user.hook";
 
 const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -49,6 +50,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   const { mutate: downVotePost } = useAddDownVotePost();
   const { mutate: removeUpVoteFormPost } = useRemoveUpVoteFromPost();
   const { mutate: removeDownVoteFormPost } = useRemoveDownVoteFromPost();
+  const { mutate: followUser } = useFollowUser();
+  const { mutate: unFollowUser } = useUnfollowUser();
 
   const {
     _id,
@@ -97,14 +100,24 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
     }
   };
 
-  const handleEdit = (postId: string) => {
-    // Implement edit logic, e.g., open edit modal
-  };
-
   const handleDelete = (postId: string) => {
     deletePost({ id: postId });
 
     router.push("/posts");
+  };
+
+  const isFollowing = (userId: string) => {
+    return author?.followers?.some(
+      (followedUser) => followedUser?._id === userId
+    );
+  };
+
+  const handleFollow = (id: string, name: string) => {
+    followUser({ id, name });
+  };
+
+  const handleUnFollow = (id: string, name: string) => {
+    unFollowUser({ id, name });
   };
 
   const isPremiumUser = user?.status === "PREMIUM";
@@ -112,17 +125,45 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   return (
     <NextUiCard className="cursor-pointer hover:shadow-lg transition-shadow">
       <CardHeader className="justify-between">
-        <div className="flex gap-3">
-          <Avatar size="sm" src={author?.profilePhoto} />
-          <div className="flex flex-col gap-1 items-start justify-center">
-            <h4 className="text-small font-semibold leading-none">
-              {author?.name}
-            </h4>
-            <h5 className="text-small tracking-tight text-default-400">
-              {category}
-            </h5>
+        <div className="flex gap-3 items-center">
+          <div className="flex gap-3">
+            <Avatar size="sm" src={author?.profilePhoto} />
+            <div className="flex flex-col gap-1 items-start justify-center">
+              <h4 className="text-small font-semibold leading-none">
+                {author?.name}
+              </h4>
+              <h5 className="text-small tracking-tight text-default-400">
+                {category}
+              </h5>
+            </div>
+          </div>
+          <div>
+            {user && isFollowing(user?._id as string) ? (
+              <Button
+                color="danger"
+                size="sm"
+                variant="flat"
+                onClick={() =>
+                  handleUnFollow(author?._id as string, author?.name as string)
+                }
+              >
+                Unfollow
+              </Button>
+            ) : (
+              <Button
+                color="primary"
+                size="sm"
+                variant="flat"
+                onClick={() =>
+                  handleFollow(author?._id as string, author?.name as string)
+                }
+              >
+                Follow
+              </Button>
+            )}
           </div>
         </div>
+
         <div className="flex gap-2">
           {status === "PREMIUM" && (
             <Chip
@@ -242,7 +283,11 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
         </div>
       )}
       {
-        <UpdatePostModal  isOpen={openEditModal} post={post} setIsOpen={setOpenEditModal} />
+        <UpdatePostModal
+          isOpen={openEditModal}
+          post={post}
+          setIsOpen={setOpenEditModal}
+        />
       }
     </NextUiCard>
   );

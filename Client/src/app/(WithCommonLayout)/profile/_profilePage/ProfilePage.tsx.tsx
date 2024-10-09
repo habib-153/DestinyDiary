@@ -14,11 +14,14 @@ import envConfig from "@/src/config/envConfig";
 import PostCard from "@/src/components/UI/PostCard";
 import VerifyModal from "@/src/components/UI/modal/ProfileVerify/ProfileVerify";
 import UpdateProfileModal from "@/src/components/UI/modal/ProfileVerify/UpdateProfileModal";
+import { useFollowUser, useUnfollowUser } from "@/src/hooks/user.hook";
 
 const ProfilePage = ({ user }: { user: IUser }) => {
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
   const [openVerifyProfileModal, setOpenVerifyProfileModal] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
+  const { mutate: followUser } = useFollowUser();
+  const { mutate: unFollowUser } = useUnfollowUser();
 
   const {
     name,
@@ -40,6 +43,14 @@ const ProfilePage = ({ user }: { user: IUser }) => {
 
   const isFollowing = (followerId: string) => {
     return following?.some((followedUser) => followedUser._id === followerId);
+  };
+
+  const handleFollow = (id: string, name: string) => {
+    followUser({ id, name });
+  };
+
+  const handleUnFollow = (id: string, name: string) => {
+    unFollowUser({ id, name });
   };
 
   return (
@@ -141,7 +152,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
               {posts?.map((post: IPost, index: number) => (
-                <PostCard key={index} post={post} />
+                <PostCard key={index} full={false} post={post} />
               ))}
             </div>
           </Tab>
@@ -155,19 +166,29 @@ const ProfilePage = ({ user }: { user: IUser }) => {
             }
           >
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-            {followers?.map((follower, index) => (
+              {followers?.map((follower, index) => (
                 <Card key={index} className="p-4">
                   <div className="flex items-center gap-3">
                     <Avatar size="lg" src={follower?.profilePhoto} />
                     <div>
-                    <p className="font-semibold flex gap-2 items-center">
+                      <p className="font-semibold flex gap-2 items-center">
                         {follower?.name}
                         {isVerified && (
                           <BadgeCheck className="w-6 h-6 text-primary" />
                         )}
                       </p>
                       {!isFollowing(follower?._id) && (
-                        <Button color="primary" size="sm" variant="flat">
+                        <Button
+                          color="primary"
+                          size="sm"
+                          variant="flat"
+                          onClick={() =>
+                            handleFollow(
+                              follower?._id as string,
+                              follower?.name as string
+                            )
+                          }
+                        >
                           Follow Back
                         </Button>
                       )}
@@ -199,7 +220,16 @@ const ProfilePage = ({ user }: { user: IUser }) => {
                           <BadgeCheck className="w-6 h-6 text-primary" />
                         )}
                       </p>
-                      <Button color="danger" size="sm">
+                      <Button
+                        color="danger"
+                        size="sm"
+                        onClick={() =>
+                          handleUnFollow(
+                            followedUser?._id as string,
+                            followedUser?.name as string
+                          )
+                        }
+                      >
                         Unfollow
                       </Button>
                     </div>
@@ -212,19 +242,19 @@ const ProfilePage = ({ user }: { user: IUser }) => {
       </div>
 
       {openEditProfileModal && (
-          <UpdateProfileModal
-            isOpen={openEditProfileModal}
-            user={user}
-            onOpenChange={setOpenEditProfileModal}
-          />
-        )}
-  
-        {openVerifyProfileModal && (
-          <VerifyModal
-            isOpen={openVerifyProfileModal}
-            onOpenChange={setOpenVerifyProfileModal}
-          />
-        )} 
+        <UpdateProfileModal
+          isOpen={openEditProfileModal}
+          user={user}
+          onOpenChange={setOpenEditProfileModal}
+        />
+      )}
+
+      {openVerifyProfileModal && (
+        <VerifyModal
+          isOpen={openVerifyProfileModal}
+          onOpenChange={setOpenVerifyProfileModal}
+        />
+      )}
     </div>
   );
 };

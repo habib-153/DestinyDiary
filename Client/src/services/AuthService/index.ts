@@ -85,6 +85,7 @@ export const getNewAccessToken = async () => {
 
 export const getMyProfile = async () => {
   const res = await axiosInstance.get(`/profile`);
+  
 
   return res.data;
 };
