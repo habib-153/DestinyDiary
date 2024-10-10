@@ -5,6 +5,8 @@ import { FieldValues } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
 
 import axiosInstance from "@/src/libs/AxiosInstance";
+import envConfig from "@/src/config/envConfig";
+import { toast } from "sonner";
 
 export const registerUser = async (userData: FieldValues) => {
   try {
@@ -85,7 +87,6 @@ export const getNewAccessToken = async () => {
 
 export const getMyProfile = async () => {
   const res = await axiosInstance.get(`/profile`);
-  
 
   return res.data;
 };
@@ -100,7 +101,7 @@ export const getVerified = async (payload: any) => {
   }
 };
 
-export const updateUser = async (payload : FormData) => {
+export const updateUser = async (payload: FormData) => {
   try {
     const { data } = await axiosInstance.patch(`/profile`, payload);
 
@@ -112,5 +113,51 @@ export const updateUser = async (payload : FormData) => {
       "Unknown error occurred";
 
     throw new Error(errorMessage);
+  }
+};
+
+export const forgotPassword = async (payload: { email: string }) => {
+  try {
+    const response = await fetch(`${envConfig.baseApi}/auth/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+
+    return result;
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+export const resetPassword = async (userData: {
+  email: string;
+  newPassword: string;
+}, token: string ) => {
+  try {
+    const response = await fetch(`${envConfig.baseApi}/auth/reset-password`, {
+      method: "POST",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+
+      throw new Error(errorData.message || "Failed to reset password");
+    }
+
+    const result = await response.json();
+
+    return result;
+  } catch (error: any) {
+    throw error;
   }
 };

@@ -46,7 +46,7 @@ export default function RegisterPage() {
     <div className="flex h-[calc(100vh-100px)] flex-col items-center justify-center">
       <h3 className="my-2 text-xl font-bold">Register with DestinyDiary</h3>
       <p className="mb-4">Explore Together, Adventure Forever</p>
-      <div className="w-[35%]">
+      <div className="md:w-[35%]">
         <FXForm
           resolver={zodResolver(registerValidationSchema)}
           onSubmit={onSubmit}

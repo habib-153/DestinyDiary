@@ -12,7 +12,6 @@ import loginValidationSchema from "@/src/schema/loginSchema";
 import { useUser } from "@/src/context/user.provider";
 import { useUserLogin } from "@/src/hooks/auth.hook";
 
-
 const LoginPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -52,7 +51,15 @@ const LoginPage = () => {
           <div className="py-3">
             <FXInput label="Password" name="password" type="password" />
           </div>
-
+          <div className="flex items-center">
+            <Link href={"/forgot-password"}>
+              <button className="-mr-3 w-max" type="reset">
+                <span className="text-sm tracking-wide text-red-500">
+                  Forgot password ?
+                </span>
+              </button>
+            </Link>
+          </div>
           <Button
             className="my-3 w-full rounded-md bg-default-900 font-semibold text-default"
             size="lg"
