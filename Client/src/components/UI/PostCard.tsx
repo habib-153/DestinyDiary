@@ -29,6 +29,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
+import Swal from "sweetalert2";
 
 import UpdatePostModal from "./modal/PostModals/UpdatePostModal";
 
@@ -105,9 +106,21 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   };
 
   const handleDelete = (postId: string) => {
-    deletePost({ id: postId });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        deletePost({ id: postId });
 
-    router.push("/posts");
+        router.push("/posts");
+      }
+    });
   };
 
   const isFollowing = (userId: string) => {

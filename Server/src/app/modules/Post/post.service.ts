@@ -20,14 +20,17 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
 
   const result = (await Post.create(payload)).populate('author');
   await User.findByIdAndUpdate(user?._id, { $inc: { postCount: 1 } });
-  
+
   return result;
 };
 
 const getAllPostsFromDB = async (query: Record<string, unknown>) => {
-  const { sort, searchTerm, category } = query;
+  const { sort, searchTerm, category, page = 1, limit = 10 } = query;
 
-  // Base aggregation pipeline
+  const pageNumber = Math.max(Number(page), 1);
+  const limitNumber = Math.max(Number(limit), 1);
+  const skip = (pageNumber - 1) * limitNumber;
+
   const aggregationPipeline: any[] = [
     {
       $lookup: {
@@ -97,24 +100,38 @@ const getAllPostsFromDB = async (query: Record<string, unknown>) => {
     } as any);
   }
 
+  if (category) {
+    aggregationPipeline.push({
+      $match: { category },
+    } as any);
+  }
+
   if (sort === 'upvotes' || sort === 'downvotes') {
     aggregationPipeline.push({
       $sort: sort === 'upvotes' ? { upvoteCount: -1 } : { downvoteCount: 1 },
     } as any);
   }
 
-  if (category) {
-    aggregationPipeline.push({
-      $match: { category },
-    } as any);
-  }
+  aggregationPipeline.push(
+    { $skip: skip },
+    { $limit: limitNumber }
+  );
+
   const result = await Post.aggregate(aggregationPipeline);
 
-  if (!result || result.length === 0) {
-    return null;
-  }
+  const totalDocuments = await Post.countDocuments();
+  const totalPage = Math.ceil(totalDocuments / limitNumber);
 
-  return result;
+  // Return result with meta information
+  return {
+    data: result,
+    meta: {
+      page: pageNumber,
+      limit: limitNumber,
+      total: totalDocuments,
+      totalPage,
+    },
+  };
 };
 
 const getSinglePostFromDB = async (id: string) => {
