@@ -26,22 +26,22 @@ export default function AdminDashboardLayout({
     const adminLinks = [
       {
         label: "Dashboard",
-        href: "/admin-dashboard",
+        href: "/admin",
         icon: <Home size={18} />,
       },
       {
         label: "Users",
-        href: "/admin-dashboard/users",
+        href: "/admin/users",
         icon: <User size={18} />,
       },
       {
         label: "Content",
-        href: "/admin-dashboard/posts",
+        href: "/admin/posts",
         icon: <BookOpenText size={18} />,
       },
       {
         label: "Payments",
-        href: "/admin-dashboard/payments",
+        href: "/admin/payments",
         icon: <BadgeDollarSign size={18} />,
       },
     ];
@@ -49,7 +49,7 @@ export default function AdminDashboardLayout({
     const commonLinks = [
       {
         label: "NewsFeed",
-        href: "/",
+        href: "/posts",
         icon: <MessageSquareQuote size={18} />,
       },
       {

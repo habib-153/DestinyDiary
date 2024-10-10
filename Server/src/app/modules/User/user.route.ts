@@ -17,6 +17,20 @@ router.post(
 );
 router.get('/', auth(USER_ROLE.ADMIN), UserControllers.getAllUsers);
 router.get('/:id', UserControllers.getSingleUser);
-router.post('/follow/:followingId', auth(USER_ROLE.USER), UserControllers.followUser);
-router.delete('/unfollow/:followingId', auth(USER_ROLE.USER), UserControllers.unfollowUser);
-router.put('/get-verified', auth(USER_ROLE.USER, USER_ROLE.ADMIN), UserControllers.getVerified);
+router.put('/:id', auth(USER_ROLE.ADMIN), UserControllers.updateUser);
+router.delete('/:id', auth(USER_ROLE.ADMIN), UserControllers.deleteUser);
+router.post(
+  '/follow/:followingId',
+  auth(USER_ROLE.USER),
+  UserControllers.followUser
+);
+router.delete(
+  '/unfollow/:followingId',
+  auth(USER_ROLE.USER),
+  UserControllers.unfollowUser
+);
+router.put(
+  '/get-verified',
+  auth(USER_ROLE.USER, USER_ROLE.ADMIN),
+  UserControllers.getVerified
+);

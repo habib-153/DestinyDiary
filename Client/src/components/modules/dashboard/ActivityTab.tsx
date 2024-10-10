@@ -79,7 +79,7 @@ export const AllActivity = ({ chartData } : {chartData: any}) => {
   
   // User Activity Tab Content
   export const UserActivity = ({ users } : {users: IUser[]}) => {
-    console.log(users);
+
     return (
       <Table aria-label="User activity table">
         <TableHeader>

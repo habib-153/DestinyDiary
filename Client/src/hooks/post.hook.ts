@@ -105,7 +105,7 @@ export const useDeletePost = () => {
       return toast.promise(deletePost(id), {
         loading: "Deleting Post...",
         success: "Post deleted successfully!",
-        error: "Error when deleting comment.",
+        error: "Error when deleting post.",
       });
     },
   });

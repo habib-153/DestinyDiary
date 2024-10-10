@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
@@ -21,7 +23,8 @@ const getAllUsers = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: 'Users Retrieved Successfully',
-    data: users,
+    data: users?.result,
+    meta: users?.meta,
   });
 });
 
@@ -75,11 +78,35 @@ const getVerified = catchAsync(async (req, res) => {
   });
 });
 
+const updateUser = catchAsync(async(req, res)=>{
+  const { id } = req.params
+  const result = await UserServices.updateUserIntoDB(req.body, id)
+  sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'User updated successfully',
+      data: result
+  })
+})
+
+const deleteUser = catchAsync(async(req, res)=>{
+  const { id } = req.params
+  const result = await UserServices.deleteUserFromDB(id)
+  sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'User deleted successfully',
+      data: null
+  })
+})
+
 export const UserControllers = {
   getSingleUser,
   userRegister,
   getAllUsers,
   followUser,
   unfollowUser,
-  getVerified
+  getVerified,
+  updateUser,
+  deleteUser
 };

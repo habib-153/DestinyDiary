@@ -5,7 +5,7 @@ import { IUser } from "../types";
 import { getVerified, updateUser } from "../services/AuthService";
 import { useUser } from "../context/user.provider";
 import { updateAccessTokenInCookies } from "../utils/updateAccessToken";
-import { followUser, getAllUsers, unFollowUser } from "../services/UserService";
+import { deleteUser, followUser, getAllUsers, unFollowUser, updateUserRole } from "../services/UserService";
 
 export const useGetAllUsers = (query?: string) => {
   const { data, refetch, isLoading } = useQuery({
@@ -75,6 +75,32 @@ export const useUpdateUser = () => {
     },
     onError: (error) => {
       toast.error(`Failed to update profile ${error?.message}`);
+    },
+  });
+};
+
+export const useUpdateUserRole = () => {
+  return useMutation<any, Error, { payload : any; id: string }>({
+    mutationKey: ["UPDATE_USER_ROLE"],
+    mutationFn: async ({ payload, id }) => {
+      return toast.promise(updateUserRole(id, payload), {
+        loading: "Updating User Role...",
+        success: "User Role updated successfully!",
+        error: "Error when updating the user role.",
+      });
+    },
+  });
+};
+
+export const useDeleteUser = () => {
+  return useMutation<any, Error, { id: string }>({
+    mutationKey: ["DELETE_USER"],
+    mutationFn: async ({ id }) => {
+      return toast.promise(deleteUser(id), {
+        loading: "Deleting User...",
+        success: "User deleted successfully!",
+        error: "Error when deleting user.",
+      });
     },
   });
 };

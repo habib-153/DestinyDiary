@@ -14,6 +14,35 @@ export const getAllUsers = async (query?: string) => {
   }
 };
 
+export const updateUserRole = async (id: string, payload: any) => {
+  try {
+    const { data } = await axiosInstance.put(`/users/${id}`, payload);
+
+    revalidateTag("users");
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const deleteUser = async (id: string): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.delete(`/users/${id}`);
+
+    revalidateTag("users");
+
+    return data;
+  } catch (error: any) {
+    const errorMessage =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Unknown error occurred";
+
+    throw new Error(errorMessage);
+  }
+};
+
 export const followUser = async (followedId: string): Promise<any> => {
   try {
     const { data } = await axiosInstance.post(`/users/follow/${followedId}`);
