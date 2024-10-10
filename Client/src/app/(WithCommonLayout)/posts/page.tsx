@@ -11,6 +11,7 @@ import { Key, useEffect, useState } from "react";
 import { Card, CardBody } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
 import { Chip } from "@nextui-org/chip";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import PostCard from "@/src/components/UI/PostCard";
 import envConfig from "@/src/config/envConfig";
@@ -44,7 +45,10 @@ const Posts = () => {
   const [sort, setSort] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [filterApplied, setFilterApplied] = useState(false);
-  const {user} = useUser()
+  const { user } = useUser();
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const [posts, setPosts] = useState<IPost[]>([]);
 
   // Debounce implementation
   useEffect(() => {
@@ -74,15 +78,31 @@ const Posts = () => {
     ...(debouncedSearchTerm && { searchTerm: debouncedSearchTerm }),
     ...(category && { category }),
     ...(sort && { sort }),
+    page: page.toString(),
   }).toString()}`;
 
   const { data: postData } = useGetAllPosts(apiUrl);
-  const posts = postData?.data
+
+  useEffect(() => {
+    if (postData?.data) {
+      if (page === 1) {
+        setPosts(postData?.data);
+      } else {
+        setPosts((prev) => [...prev, ...postData?.data]);
+      }
+      setHasMore(postData?.data?.length === 10);
+    }
+  }, [postData, page]);
 
   return (
     <div className="max-w-7xl relative mx-auto py-5">
       <div className="w-full text-right absolute -top-5 sm:top-5">
-        <Button className="bg-black text-white font-medium" onClick={() => (user ? setOpenModal(true) : setOpenAuthModal(true))}>Create A Post</Button>
+        <Button
+          className="bg-black text-white font-medium"
+          onClick={() => (user ? setOpenModal(true) : setOpenAuthModal(true))}
+        >
+          Create A Post
+        </Button>
       </div>
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold mb-2">Travel Posts</h1>
@@ -170,17 +190,39 @@ const Posts = () => {
           )}
         </CardBody>
       </Card>
-
-      <div className="my-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {posts ?
-          posts?.map((post : IPost, index: number) => (
-            <PostCard key={index} full={false} post={post} />
-          ))
-          :
-          Array.from({ length: 2 }).map((_, index) => (
-            <PostCardSkeleton key={index} />))
-        }
+      <div>
+        <InfiniteScroll
+          dataLength={posts.length}
+          endMessage={
+            !hasMore && (
+              <p style={{ textAlign: "center" }}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            )
+          }
+          hasMore={hasMore}
+          loader={
+            hasMore && (
+              <div className="grid grid-cols-2 gap-6">
+                <PostCardSkeleton />
+                <PostCardSkeleton />
+              </div>
+            )
+          }
+          next={() => setPage((prev) => prev + 1)}
+        >
+          <div className="my-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {posts
+              ? posts?.map((post: IPost, index: number) => (
+                  <PostCard key={index} full={false} post={post} />
+                ))
+              : Array.from({ length: 2 }).map((_, index) => (
+                  <PostCardSkeleton key={index} />
+                ))}
+          </div>
+        </InfiniteScroll>
       </div>
+
       {openAuthModal && (
         <AuthModal
           openAuthModal={openAuthModal}
@@ -188,10 +230,7 @@ const Posts = () => {
         />
       )}
       {openModal && (
-        <CreatePostModal
-          isOpen={openModal}
-          setIsOpen={setOpenModal}
-        />
+        <CreatePostModal isOpen={openModal} setIsOpen={setOpenModal} />
       )}
     </div>
   );

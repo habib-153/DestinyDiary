@@ -28,7 +28,7 @@ export default function ForgotPasswordPage() {
     const userData = {email: email};
 
     const res = await forgotPassword(userData);
-console.log(res)
+
     if(res?.err){
         setIsLoading(false);
         toast.error(res?.message, {id: toastId});
