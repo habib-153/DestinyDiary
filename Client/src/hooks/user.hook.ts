@@ -1,11 +1,21 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { IUser } from "../types";
 import { getVerified, updateUser } from "../services/AuthService";
 import { useUser } from "../context/user.provider";
 import { updateAccessTokenInCookies } from "../utils/updateAccessToken";
-import { followUser, unFollowUser } from "../services/UserService";
+import { followUser, getAllUsers, unFollowUser } from "../services/UserService";
+
+export const useGetAllUsers = (query?: string) => {
+  const { data, refetch, isLoading } = useQuery({
+    queryKey: query ? ["users", query] : ["users"],
+    queryFn: async () => await getAllUsers(query || ""),
+    refetchInterval: 2000,
+  });
+
+  return { data, refetch, isLoading };
+};
 
 export const useGetVerified = (onSuccessCallback: any) => {
   return useMutation<any, Error, Partial<IUser>>({
@@ -25,10 +35,9 @@ export const useGetVerified = (onSuccessCallback: any) => {
 };
 
 export const useFollowUser = () => {
-
   return useMutation<any, Error, { id: string; name: string }>({
     mutationKey: ["FOLLOW_USER"],
-    mutationFn: async ({ id, name }) => {      
+    mutationFn: async ({ id, name }) => {
       return toast.promise(followUser(id), {
         loading: "Following user...",
         success: `You followed ${name}!`,
@@ -39,11 +48,9 @@ export const useFollowUser = () => {
 };
 
 export const useUnfollowUser = () => {
-
   return useMutation<any, Error, { id: string; name: string }>({
     mutationKey: ["UNFOLLOW_USER"],
     mutationFn: async ({ id, name }) => {
-      
       return toast.promise(unFollowUser(id), {
         loading: "UnFollowing user...",
         success: `You unFollowed ${name}!`,
@@ -71,4 +78,3 @@ export const useUpdateUser = () => {
     },
   });
 };
-

@@ -13,7 +13,14 @@ const createPostIntoDB = async (payload: Partial<TPost>, image: TImageFile) => {
     payload.image = image.path;
   }
 
+  const user = await User.findById(payload.author);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
   const result = (await Post.create(payload)).populate('author');
+  await User.findByIdAndUpdate(user?._id, { $inc: { postCount: 1 } });
+  
   return result;
 };
 

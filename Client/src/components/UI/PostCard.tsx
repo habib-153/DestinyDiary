@@ -16,6 +16,7 @@ import {
   Edit,
   Trash,
   Lock,
+  Printer,
 } from "lucide-react";
 import parse from "html-react-parser";
 import {
@@ -26,7 +27,8 @@ import {
 } from "@nextui-org/dropdown";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
 
 import UpdatePostModal from "./modal/PostModals/UpdatePostModal";
 
@@ -52,6 +54,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   const { mutate: removeDownVoteFormPost } = useRemoveDownVoteFromPost();
   const { mutate: followUser } = useFollowUser();
   const { mutate: unFollowUser } = useUnfollowUser();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
 
   const {
     _id,
@@ -123,7 +127,10 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   const isPremiumUser = user?.status === "PREMIUM";
 
   return (
-    <NextUiCard className="cursor-pointer hover:shadow-lg transition-shadow">
+    <NextUiCard
+      ref={contentRef}
+      className="cursor-pointer hover:shadow-lg transition-shadow"
+    >
       <CardHeader className="justify-between">
         <div className="flex gap-3 items-center">
           <div className="flex gap-3">
@@ -174,17 +181,18 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
               Premium
             </Chip>
           )}
-          {isAuthorOrAdmin && (
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  isIconOnly
-                  variant="light"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <MoreVertical className="w-5 h-5" />
-                </Button>
-              </DropdownTrigger>
+          {/* {isAuthorOrAdmin ? ( */}
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                isIconOnly
+                variant="light"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MoreVertical className="w-5 h-5" />
+              </Button>
+            </DropdownTrigger>
+            {isAuthorOrAdmin ? (
               <DropdownMenu aria-label="Post actions">
                 <DropdownItem
                   key="edit"
@@ -208,9 +216,29 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
                 >
                   Delete post
                 </DropdownItem>
+                <DropdownItem
+                  key="print"
+                  startContent={<Edit className="w-4 h-4" />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenEditModal(true);
+                  }}
+                >
+                  Print Post
+                </DropdownItem>
               </DropdownMenu>
-            </Dropdown>
-          )}
+            ) : (
+              <DropdownMenu aria-label="Post actions">
+                <DropdownItem
+                  key="print"
+                  startContent={<Printer className="w-4 h-4" />}
+                  onClick={() => reactToPrintFn()}
+                >
+                  Print Post
+                </DropdownItem>
+              </DropdownMenu>
+            )}
+          </Dropdown>
         </div>
       </CardHeader>
       {status === "PREMIUM" && !isPremiumUser ? (
@@ -235,7 +263,7 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
                   width={full ? "80%" : "100%"}
                 />
               </div>
-              <div className="text-small text-default-400">
+              <div className="text-small text-default-600">
                 {full
                   ? parse(description)
                   : parse(truncateDescription(description, 150))}

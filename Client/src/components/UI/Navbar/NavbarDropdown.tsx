@@ -66,14 +66,11 @@ export default function NavbarDropdown({ user }: IProps) {
           <DropdownItem
             onClick={() =>
               handleNavigation(
-                user?.role === "USER" ? "/user-dashboard" : "/admin-dashboard"
+                user?.role === "ADMIN" ? "/admin" : "/user-dashboard"
               )
             }
           >
             Dashboard
-          </DropdownItem>
-          <DropdownItem key="create-a-post" textValue="Create a Post">
-            Create a Post
           </DropdownItem>
           <DropdownItem
             key="logout"

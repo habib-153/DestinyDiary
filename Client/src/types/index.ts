@@ -28,6 +28,7 @@ export interface IPost {
   upvoteCount?: number;
   downvoteCount?: number;
   downVotes?: [IUser];
+  createdAt?: string;
 }
 
 export interface IUser {
