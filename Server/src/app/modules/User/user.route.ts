@@ -26,9 +26,10 @@ router.post(
 );
 router.delete(
   '/unfollow/:followingId',
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.USER, USER_ROLE.ADMIN),
   UserControllers.unfollowUser
 );
+
 router.put(
   '/get-verified',
   auth(USER_ROLE.USER, USER_ROLE.ADMIN),

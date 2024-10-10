@@ -66,7 +66,7 @@ export class QueryBuilder<T> {
     const excludeFields = ['searchTerm', 'page', 'limit', 'sortBy', 'fields'];
 
     excludeFields.forEach((e) => delete queryObj[e]);
-
+    
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
 
     return this;

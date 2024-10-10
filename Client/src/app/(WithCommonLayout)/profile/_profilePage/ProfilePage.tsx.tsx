@@ -173,6 +173,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
                     <div>
                       <p className="font-semibold flex gap-2 items-center">
                         {follower?.name}
+                        
                         {isVerified && (
                           <BadgeCheck className="w-6 h-6 text-primary" />
                         )}

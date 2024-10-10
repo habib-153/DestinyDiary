@@ -66,7 +66,7 @@ export default function NavbarDropdown({ user }: IProps) {
           <DropdownItem
             onClick={() =>
               handleNavigation(
-                user?.role === "ADMIN" ? "/admin" : "/user-dashboard"
+                user?.role === "ADMIN" ? "/admin" : "/user"
               )
             }
           >

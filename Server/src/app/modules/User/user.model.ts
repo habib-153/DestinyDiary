@@ -88,7 +88,6 @@ const userSchema = new Schema<TUser, IUserModel>(
   },
   {
     timestamps: true,
-    virtuals: true,
   }
 );
 

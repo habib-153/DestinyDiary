@@ -3,9 +3,6 @@ import type { Metadata } from "next";
 import {
   Home,
   User,
-  MessageSquareQuote,
-  Contact,
-  ContactRound,
   BookOpenText,
   BadgeDollarSign,
 } from "lucide-react";
@@ -41,32 +38,14 @@ export default function AdminDashboardLayout({
       },
       {
         label: "Payments",
-        href: "/admin/payments",
+        href: "/admin/payment",
         icon: <BadgeDollarSign size={18} />,
-      },
-    ];
-  
-    const commonLinks = [
-      {
-        label: "NewsFeed",
-        href: "/posts",
-        icon: <MessageSquareQuote size={18} />,
-      },
-      {
-        label: "About",
-        href: "/about",
-        icon: <ContactRound size={18} />,
-      },
-      {
-        label: "Contact",
-        href: "/contact",
-        icon: <Contact size={18} />,
       },
     ];
   
     return (
       <div className="flex min-h-screen bg-gray-50">
-        <Sidebar commonLinks={commonLinks} specificLinks={adminLinks} title="Admin Panel" />
+        <Sidebar specificLinks={adminLinks} title="Admin Panel" />
         <main className="flex-1 overflow-y-auto p-8">{children}</main>
       </div>
     );

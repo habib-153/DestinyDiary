@@ -48,6 +48,7 @@ export const followUser = async (followedId: string): Promise<any> => {
     const { data } = await axiosInstance.post(`/users/follow/${followedId}`);
 
     revalidateTag("follow");
+    revalidateTag('users');
     revalidateTag("posts");
 
     return data.data;
@@ -67,7 +68,7 @@ export const unFollowUser = async (followedId: string): Promise<any> => {
       `/users/unfollow/${followedId}`
     );
 
-    //   revalidateTag("follow");
+    revalidateTag("follow");
     revalidateTag("posts");
 
     return data.data;
