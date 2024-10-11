@@ -5,7 +5,7 @@ import { Button } from "@nextui-org/button";
 import { Card } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { BadgeCheck, BookOpen, Edit, Users } from "lucide-react";
+import { BadgeCheck, BookOpen, Edit, KeySquare, Users } from "lucide-react";
 import { useState } from "react";
 
 import { IPost, IUser } from "@/src/types";
@@ -15,9 +15,11 @@ import PostCard from "@/src/components/UI/PostCard";
 import VerifyModal from "@/src/components/UI/modal/ProfileVerify/ProfileVerify";
 import UpdateProfileModal from "@/src/components/UI/modal/ProfileVerify/UpdateProfileModal";
 import { useFollowUser, useUnfollowUser } from "@/src/hooks/user.hook";
+import ChangePassword from "@/src/components/UI/modal/ProfileVerify/ChangePassword";
 
 const ProfilePage = ({ user }: { user: IUser }) => {
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
+  const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
   const [openVerifyProfileModal, setOpenVerifyProfileModal] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
   const { mutate: followUser } = useFollowUser();
@@ -80,14 +82,26 @@ const ProfilePage = ({ user }: { user: IUser }) => {
           {/* Profile Info Section */}
           <div className="md:w-2/3 mx-auto space-y-6">
             <div className="flex justify-between items-start">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold">{name}</h1>
-                  {isVerified && (
-                    <BadgeCheck className="w-6 h-6 text-primary" />
-                  )}
+              <div className="flex gap-2 items-center">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-2xl font-bold">{name}</h1>
+                    {isVerified && (
+                      <BadgeCheck className="w-6 h-6 text-primary" />
+                    )}
+                  </div>
+                  <p className="text-gray-500">{email}</p>
                 </div>
-                <p className="text-gray-500">{email}</p>
+                <div>
+                  <Button
+                    color="primary"
+                    startContent={<Edit className="w-4 h-4" />}
+                    variant="bordered"
+                    onPress={() => setOpenEditProfileModal(true)}
+                  >
+                    Edit Profile
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -115,11 +129,11 @@ const ProfilePage = ({ user }: { user: IUser }) => {
           <div className="flex md:flex-col items-center justify-center gap-5 ">
             <Button
               color="primary"
-              startContent={<Edit className="w-4 h-4" />}
+              startContent={<KeySquare className="w-4 h-4" />}
               variant="bordered"
-              onPress={() => setOpenEditProfileModal(true)}
+              onPress={() => setOpenChangePasswordModal(true)}
             >
-              Edit Profile
+              Change Password
             </Button>
             {!isVerified && totalUpVotes >= 1 && (
               <Button
@@ -207,8 +221,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
               </div>
             }
           >
-            <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-              {/* Render following users here */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
               {following?.map((followedUser, index) => (
                 <Card key={index} className="p-4">
                   <div className="flex items-center gap-3">
@@ -246,6 +259,12 @@ const ProfilePage = ({ user }: { user: IUser }) => {
           isOpen={openEditProfileModal}
           user={user}
           onOpenChange={setOpenEditProfileModal}
+        />
+      )}
+      {openChangePasswordModal && (
+        <ChangePassword
+          isOpen={openChangePasswordModal}
+          onOpenChange={setOpenChangePasswordModal}
         />
       )}
 

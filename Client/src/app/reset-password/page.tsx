@@ -33,8 +33,10 @@ const ResetPassword = () => {
       setIsLoading(false);
       setIsSuccess(true);
       toast.success("Password reset successful.", {id: toastId});
+    }else{
+      setIsLoading(false);
+      toast.error(res?.message, {id: toastId});
     }
-    
   };
 
   return (

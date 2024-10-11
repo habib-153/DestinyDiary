@@ -26,10 +26,7 @@ router.post(
   validateRequest(AuthValidation.changePasswordValidationSchema),
   AuthControllers.changePassword
 );
-router.post(
-  '/forgot-password',
-  AuthControllers.forgotPassword
-);
+router.post('/forgot-password', AuthControllers.forgotPassword);
 
 router.post('/reset-password', AuthControllers.resetPassword);
 

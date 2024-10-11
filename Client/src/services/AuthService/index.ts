@@ -160,3 +160,25 @@ export const resetPassword = async (userData: {
     throw error;
   }
 };
+
+export const changePassword = async (userData: {
+  oldPassword: string;
+  newPassword: string;
+} ) => {
+  try {
+    const response = await fetch(`${envConfig.baseApi}/auth/change-password`, {
+      method: "POST",
+      headers: {
+        Authorization: `${cookies().get("accessToken")?.value}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const result = await response.json();
+
+    return result;
+  } catch (error: any) {
+    throw error;
+  }
+};
