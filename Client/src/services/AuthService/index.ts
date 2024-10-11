@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 
 import axiosInstance from "@/src/libs/AxiosInstance";
 import envConfig from "@/src/config/envConfig";
+import { revalidateTag } from "next/cache";
 
 export const registerUser = async (userData: FieldValues) => {
   try {
@@ -94,6 +95,8 @@ export const getVerified = async (payload: any) => {
   try {
     const { data } = await axiosInstance.put("/users/get-verified", payload);
 
+    revalidateTag("posts");
+
     return data;
   } catch (error: any) {
     throw new Error(error);
@@ -176,7 +179,6 @@ export const changePassword = async (userData: {
     });
 
     const result = await response.json();
-    console.log(result)
 
     return result;
   } catch (error: any) {

@@ -241,11 +241,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
                 </DropdownItem>
                 <DropdownItem
                   key="print"
-                  startContent={<Edit className="w-4 h-4" />}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenEditModal(true);
-                  }}
+                  startContent={<Printer className="w-4 h-4" />}
+                  onClick={() => reactToPrintFn()}
                 >
                   Print Post
                 </DropdownItem>
