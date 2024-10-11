@@ -10,7 +10,7 @@ import img2 from "@/src/assets/about2.jpg";
 
 export default function AboutUs() {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto mb-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Column - Mission and Vision */}
         <div className="space-y-6">

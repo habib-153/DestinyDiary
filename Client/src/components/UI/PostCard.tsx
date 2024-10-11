@@ -43,6 +43,7 @@ import {
   useRemoveUpVoteFromPost,
 } from "@/src/hooks/post.hook";
 import { useFollowUser, useUnfollowUser } from "@/src/hooks/user.hook";
+import AuthModal from "./modal/AuthModal/AuthModal";
 
 const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -57,6 +58,7 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   const { mutate: unFollowUser } = useUnfollowUser();
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+  const [openAuthModal, setOpenAuthModal] = useState(false);
 
   const {
     _id,
@@ -158,7 +160,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
             </div>
           </div>
           <div>
-            {user && isFollowing(user?._id as string) ? (
+            {
+             !isAuthorOrAdmin ? <div> {user && isFollowing(user?._id as string) ? (
               <Button
                 color="danger"
                 size="sm"
@@ -180,7 +183,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
               >
                 Follow
               </Button>
-            )}
+            )}</div> : <div></div>
+            }
           </div>
         </div>
 
@@ -289,8 +293,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
                 color="primary"
                 startContent={<ThumbsUp className="w-4 h-4" />}
                 variant="solid"
-                onClick={() => {
-                  handleUpVote(_id as string, true);
+                onClick={() => { user ?
+                  handleUpVote(_id as string, true) : setOpenAuthModal(true);
                 }}
               >
                 {upvoteCount}
@@ -300,8 +304,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
                 color="primary"
                 startContent={<ThumbsUp className="w-4 h-4" />}
                 variant="light"
-                onClick={() => {
-                  handleUpVote(_id as string, false);
+                onClick={() => { user ?
+                  handleUpVote(_id as string, false) : setOpenAuthModal(true);
                 }}
               >
                 {upvoteCount}
@@ -313,9 +317,13 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
               variant={isDownVoted(user?._id as string) ? "solid" : "light"}
               onClick={(e) => {
                 e.stopPropagation();
-                isDownVoted(user?._id as string)
-                  ? handleDownVote(_id as string, true)
-                  : handleDownVote(_id as string, false);
+                if (user) {
+                  isDownVoted(user._id as string)
+                    ? handleDownVote(_id as string, true)
+                    : handleDownVote(_id as string, false);
+                } else {
+                  setOpenAuthModal(true);
+                }
               }}
             >
               {downvoteCount}
@@ -330,6 +338,12 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
           setIsOpen={setOpenEditModal}
         />
       }
+      {openAuthModal && (
+        <AuthModal
+          openAuthModal={openAuthModal}
+          setOpenAuthModal={setOpenAuthModal}
+        />
+      )}
     </NextUiCard>
   );
 };

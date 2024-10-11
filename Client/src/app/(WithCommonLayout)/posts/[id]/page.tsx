@@ -21,7 +21,15 @@ const PostDetails = () => {
       ) : (
         <div>
           <PostCard full={true} post={postData} />
-          <CommentSection postId={id as string} user={user} />
+          {
+            user ? <CommentSection postId={id as string} user={user} /> 
+            : <div className="my-4 p-4 border border-gray-300 rounded-md text-center bg-gray-50">
+            <p className="text-gray-700">
+              You need to <a className="text-blue-500 underline" href="/login">login</a> to comment on this post.
+            </p>
+          </div>
+          }
+          
         </div>
       )}
     </div>

@@ -129,7 +129,7 @@ const PaymentManagement = () => {
   }, []);
 
   return (
-    <div className="my-10 lg:my-5">
+    <div className="">
       <div className="text-center mb-4">
         <h1 className="text-2xl font-bold">All Payments</h1>
       </div>

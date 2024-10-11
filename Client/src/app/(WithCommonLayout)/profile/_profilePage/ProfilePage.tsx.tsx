@@ -78,7 +78,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
           </div>
 
           {/* Profile Info Section */}
-          <div className="md:w-2/3 space-y-6">
+          <div className="md:w-2/3 mx-auto space-y-6">
             <div className="flex justify-between items-start">
               <div>
                 <div className="flex items-center gap-2">
@@ -89,49 +89,49 @@ const ProfilePage = ({ user }: { user: IUser }) => {
                 </div>
                 <p className="text-gray-500">{email}</p>
               </div>
+            </div>
+
+            <div className="flex gap-6">
+              <div className="text-center">
+                <p className="text-xl font-semibold">
+                  {posts ? posts.length : 0}
+                </p>
+                <p className="text-gray-500">Posts</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xl font-semibold">
+                  {followers?.length || 0}
+                </p>
+                <p className="text-gray-500">Followers</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xl font-semibold">
+                  {following?.length || 0}
+                </p>
+                <p className="text-gray-500">Following</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex md:flex-col items-center justify-center gap-5 ">
+            <Button
+              color="primary"
+              startContent={<Edit className="w-4 h-4" />}
+              variant="bordered"
+              onPress={() => setOpenEditProfileModal(true)}
+            >
+              Edit Profile
+            </Button>
+            {totalUpVotes}
+            {!isVerified && totalUpVotes >= 1 && (
               <Button
                 color="primary"
-                startContent={<Edit className="w-4 h-4" />}
-                variant="bordered"
-                onPress={() => setOpenEditProfileModal(true)}
+                startContent={<BadgeCheck className="w-4 h-4" />}
+                variant="flat"
+                onPress={() => setOpenVerifyProfileModal(true)}
               >
-                Edit Profile
+                Get Verified
               </Button>
-            </div>
-            <div className="flex justify-between">
-              <div className="flex gap-6">
-                <div className="text-center">
-                  <p className="text-xl font-semibold">
-                    {posts ? posts.length : 0}
-                  </p>
-                  <p className="text-gray-500">Posts</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xl font-semibold">
-                    {followers?.length || 0}
-                  </p>
-                  <p className="text-gray-500">Followers</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xl font-semibold">
-                    {following?.length || 0}
-                  </p>
-                  <p className="text-gray-500">Following</p>
-                </div>
-              </div>
-              <div>
-                {!isVerified && totalUpVotes >= 0 && (
-                  <Button
-                    color="primary"
-                    startContent={<BadgeCheck className="w-4 h-4" />}
-                    variant="flat"
-                    onPress={() => setOpenVerifyProfileModal(true)}
-                  >
-                    Get Verified
-                  </Button>
-                )}
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </Card>
@@ -150,7 +150,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
               </div>
             }
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
               {posts?.map((post: IPost, index: number) => (
                 <PostCard key={index} full={false} post={post} />
               ))}
@@ -165,7 +165,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
               </div>
             }
           >
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
               {followers?.map((follower, index) => (
                 <Card key={index} className="p-4">
                   <div className="flex items-center gap-3">
@@ -173,7 +173,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
                     <div>
                       <p className="font-semibold flex gap-2 items-center">
                         {follower?.name}
-                        
+
                         {isVerified && (
                           <BadgeCheck className="w-6 h-6 text-primary" />
                         )}
@@ -208,7 +208,7 @@ const ProfilePage = ({ user }: { user: IUser }) => {
               </div>
             }
           >
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+            <div className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
               {/* Render following users here */}
               {following?.map((followedUser, index) => (
                 <Card key={index} className="p-4">

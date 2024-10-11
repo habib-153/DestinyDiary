@@ -54,7 +54,7 @@ const Posts = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchInput);
-    }, 800);
+    }, 900);
 
     return () => {
       clearTimeout(handler);
@@ -203,7 +203,7 @@ const Posts = () => {
           hasMore={hasMore}
           loader={
             hasMore && (
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid lg:grid-cols-2 gap-6">
                 <PostCardSkeleton />
                 <PostCardSkeleton />
               </div>
@@ -211,7 +211,7 @@ const Posts = () => {
           }
           next={() => setPage((prev) => prev + 1)}
         >
-          <div className="my-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="my-6 grid grid-cols-1 px-1 lg:grid-cols-2 gap-6">
             {posts
               ? posts?.map((post: IPost, index: number) => (
                   <PostCard key={index} full={false} post={post} />

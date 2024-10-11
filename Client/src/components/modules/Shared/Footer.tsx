@@ -32,7 +32,7 @@ const Footer = () => {
                 <br />
                 Postal Code: 12345
                 <br />
-                Support: support@shineslot.com
+                Support: support@destinydiary.com
                 <br />
                 (Available : 10:00am to 07:00pm)
               </p>
@@ -99,7 +99,7 @@ const Footer = () => {
                   </svg>
                 </a>
               </div>
-              <p>@ShineSlot 2024</p>
+              <p>@destinyDiary 2024</p>
             </nav>
           </div>
         </div>

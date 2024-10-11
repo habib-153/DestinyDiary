@@ -71,6 +71,7 @@ const VerifyModal = ({ isOpen, onOpenChange }: VerifyModalProps) => {
         footer: "border-t-[1px] border-[#292f46]",
       }} 
       isOpen={isOpen}
+      scrollBehavior="outside"
       size="3xl"
       onOpenChange={onOpenChange}
     >

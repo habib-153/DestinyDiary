@@ -8,7 +8,7 @@ import ContactForm from "@/src/components/UI/Contact/ContactForm";
 export default function ContactUs() {
 
   return (
-    <div className="container mx-auto py-12">
+    <div className="container mx-auto mb-5">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Column - Contact Form */}
         <div className="space-y-6">

@@ -1,7 +1,15 @@
+'use client';
+import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
-import { MessageSquareQuote, Contact, ContactRound } from "lucide-react";
+import { MessageSquareQuote, Contact, ContactRound, Menu, LogOut } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import { logout } from "@/src/services/AuthService";
+import { protectedRoutes } from "@/src/constant";
+import { useUser } from "@/src/context/user.provider";
 
 interface ISidebarLink {
   label: string;
@@ -13,35 +21,89 @@ interface SidebarProps {
   title: string;
 }
 
+const commonLinks = [
+  {
+    label: "NewsFeed",
+    href: "/posts",
+    icon: <MessageSquareQuote size={18} />,
+  },
+  {
+    label: "About",
+    href: "/about",
+    icon: <ContactRound size={18} />,
+  },
+  {
+    label: "Contact",
+    href: "/contact",
+    icon: <Contact size={18} />,
+  },
+];
+
 const Sidebar = ({ specificLinks, title }: SidebarProps) => {
-  const commonLinks = [
-    {
-      label: "NewsFeed",
-      href: "/posts",
-      icon: <MessageSquareQuote size={18} />,
-    },
-    {
-      label: "About",
-      href: "/about",
-      icon: <ContactRound size={18} />,
-    },
-    {
-      label: "Contact",
-      href: "/contact",
-      icon: <Contact size={18} />,
-    },
-  ];
+  const [isOpen, setIsOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const { setUser, setIsLoading: userLoading } = useUser();
+  const toggleSidebar = () => setIsOpen(!isOpen);
+const router = useRouter()
+const pathname = usePathname()
+
+  const handleLogout = () => {
+    logout();
+    setUser(null);
+    userLoading(true);
+
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push("/");
+    }
+    toast.success("Logged out successfully");
+  };
+
+  const handleClick = (event: MouseEvent) => {
+    if (
+      sidebarRef.current &&
+      !sidebarRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClick); 
+    } else {
+      document.removeEventListener("mousedown", handleClick); 
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, [isOpen]);
 
   return (
     <>
-      <aside className="hidden w-64 border-r border-gray-200 bg-white p-4 lg:block">
+<div className="relative">
+      <Button
+        className="absolute top-0 left-0 z-10 lg:hidden p-2 m-2 text-gray-600 hover:text-gray-800"
+        onClick={toggleSidebar}
+      >
+        <Menu size={28} />
+      </Button>
+
+      {/* Sidebar Drawer */}
+      <div
+        ref={sidebarRef}
+        className={`fixed top-0 left-0 h-full w-52 md:w-72 bg-gray-200 z-50 transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 lg:translate-x-0 lg:relative lg:flex p-4 flex flex-col`}
+      >
+        <div className="w-full space-y-3 flex-grow">
         <Link href={"/"}>
-          <div className="mb-6">
+          <div className="mb-6 text-center">
             <h2 className="text-xl font-bold">{title}</h2>
           </div>
         </Link>
-        <div className="space-y-6">
-          <div>
+        <Divider />
+        <div>
             <nav className="space-y-1">
               {specificLinks.map((link) => (
                 <Link
@@ -57,9 +119,6 @@ const Sidebar = ({ specificLinks, title }: SidebarProps) => {
           </div>
           <Divider />
           <div>
-            <h3 className="mb-2 text-sm font-semibold text-gray-500">
-              GENERAL
-            </h3>
             <nav className="space-y-1">
               {commonLinks.map((link) => (
                 <Link
@@ -73,8 +132,16 @@ const Sidebar = ({ specificLinks, title }: SidebarProps) => {
               ))}
             </nav>
           </div>
+          <Divider className="" />
+          <div className="cursor-pointer">
+            <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100"  onClick={handleLogout}>
+              <LogOut />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
-      </aside>
+      </div>
+    </div>
     </>
   );
 };

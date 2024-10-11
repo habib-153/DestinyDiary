@@ -19,7 +19,6 @@ import "react-quill/dist/quill.snow.css";
 import { Controller, useForm } from "react-hook-form";
 import { Checkbox } from "@nextui-org/checkbox";
 
-import { useUser } from "@/src/context/user.provider";
 import { useUpdatePost } from "@/src/hooks/post.hook";
 import { IPost } from "@/src/types";
 
@@ -50,13 +49,11 @@ export default function UpdatePostModal({
   const [imagePreview, setImagePreview] = useState(
     post?.image as string | null
   );
-  const { control, handleSubmit, setValue, reset, formState } = useForm();
+  const { control, handleSubmit, setValue, formState } = useForm();
   const { errors } = formState;
   const [isSelected, setIsSelected] = useState(
     post?.status === "PREMIUM" ? true : false
   );
-
-  const { user } = useUser();
 
   const { mutate: updatePost } = useUpdatePost();
 
@@ -180,9 +177,6 @@ export default function UpdatePostModal({
                               />
                             </div>
                           )}
-                          rules={{
-                            required: "Please provide post description",
-                          }}
                         />
                         {errors.description && (
                           <p className="text-red-500 mt-12">

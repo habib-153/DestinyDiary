@@ -46,7 +46,7 @@ export default function AdminDashboardLayout({
     return (
       <div className="flex min-h-screen bg-gray-50">
         <Sidebar specificLinks={adminLinks} title="Admin Panel" />
-        <main className="flex-1 overflow-y-auto p-8">{children}</main>
+        <main className="flex-1 overflow-y-auto px-3 my-12 sm:my-5">{children}</main>
       </div>
     );
   }

@@ -30,7 +30,7 @@ const PostManagement = () => {
     };
   
     return (
-      <div className="my-10 lg:my-5">
+      <div className="">
         <div className="text-center mb-4">
           <h1 className="text-2xl font-bold">Post Management</h1>
           <p className="text-gray-500">Manage post and content</p>

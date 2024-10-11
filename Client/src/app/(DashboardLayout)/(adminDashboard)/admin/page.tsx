@@ -51,7 +51,7 @@ const AdminDashboard = () => {
   
     return (
       <div className="space-y-6">
-        <div>
+        <div className="text-center">
           <h1 className="text-2xl font-bold">Dashboard Overview</h1>
           <p className="text-gray-500">Monitor your website&apos;s key metrics</p>
         </div>

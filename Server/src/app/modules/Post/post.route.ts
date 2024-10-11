@@ -32,7 +32,7 @@ router.put(
   PostControllers.updatePost
 );
 
-router.delete('/:id', auth(USER_ROLE.USER), PostControllers.deletePost);
+router.delete('/:id', auth(USER_ROLE.USER, USER_ROLE.ADMIN), PostControllers.deletePost);
 router.post('/:postId/upvote', auth(USER_ROLE.USER), PostControllers.addPostUpvote);
 router.post('/:postId/downvote', auth(USER_ROLE.USER), PostControllers.addPostDownvote);
 router.delete('/:postId/upvote', auth(USER_ROLE.USER), PostControllers.removePostUpvote);

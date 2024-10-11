@@ -7,8 +7,8 @@ const authRoutes = ["/login", "/register"];
 type Role = keyof typeof roleBasedRoutes;
 
 const roleBasedRoutes = {
-  USER: [/^\/user-dashboard/],
-  ADMIN: [/^\/admin-dashboard/],
+  USER: [/^\/user/],
+  ADMIN: [/^\/admin/],
 };
 
 export async function middleware(request: NextRequest) {
@@ -27,9 +27,9 @@ export async function middleware(request: NextRequest) {
   }
 
   if (
-    pathname === "/postDetails" ||
-    pathname === "/profile" ||
-    pathname === "/user-profile"
+    // pathname === "/posts/:id" ||
+    pathname === "/profile" 
+    //pathname === "/user-profile"
   ) {
     return NextResponse.next();
   }
@@ -49,12 +49,11 @@ export const config = {
   matcher: [
     "/login",
     "/register",
-    "/postDetails",
+    // "/posts/:id",
     "/profile",
-    "/user-profile",
-    "/user-dashboard",
-    "/admin-dashboard",
-    "/user-dashboard/:page*",
-    "/admin-dashboard/:page*",
+    "/user",
+    "/admin",
+    "/user/:page*",
+    "/admin/:page*",
   ],
 };
