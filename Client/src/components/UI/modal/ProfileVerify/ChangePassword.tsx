@@ -24,7 +24,6 @@ const ChangePassword = ({ isOpen, onOpenChange }: ChangePasswordModalProps) => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleChangePassword: SubmitHandler<{ oldPassword: string; newPassword: string }> = async(data) => {
-    console.log(data);
     const toastId = toast.loading("Changing password...");
 
     const res = await changePassword(data);

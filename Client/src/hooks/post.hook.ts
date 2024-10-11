@@ -30,6 +30,7 @@ export const useGetSinglePost = (id: string) => {
     queryKey: ["singlePost", id],
     queryFn: async () => await getSinglePost(id),
     enabled: !!id, 
+    refetchInterval: 1500,
   });
 };
 

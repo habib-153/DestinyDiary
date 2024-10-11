@@ -5,7 +5,7 @@ import { IUser } from "../types";
 import { getVerified, updateUser } from "../services/AuthService";
 import { useUser } from "../context/user.provider";
 import { updateAccessTokenInCookies } from "../utils/updateAccessToken";
-import { deleteUser, followUser, getAllUsers, unFollowUser, updateUserRole } from "../services/UserService";
+import { deleteUser, followUser, getAllUsers, getSingleUser, unFollowUser, updateUserRole } from "../services/UserService";
 
 export const useGetAllUsers = (query?: string) => {
   const { data, refetch, isLoading } = useQuery({
@@ -15,6 +15,15 @@ export const useGetAllUsers = (query?: string) => {
   });
 
   return { data, refetch, isLoading };
+};
+
+export const useGetSingleUser = (id: string) => {
+  return useQuery({
+    queryKey: ["singleUser", id],
+    queryFn: async () => await getSingleUser(id),
+    enabled: !!id, 
+    refetchInterval: 2000,
+  });
 };
 
 export const useGetVerified = (onSuccessCallback: any) => {

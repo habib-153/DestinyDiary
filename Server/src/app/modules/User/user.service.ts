@@ -31,7 +31,15 @@ const getAllUsersFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleUserFromDB = async (id: string) => {
-  const user = await User.findById(id);
+  const user = await User.findById(id)
+    .populate({
+      path: 'followers',
+      select: 'name email profilePhoto status isVerified', // Select only needed fields
+    })
+    .populate({
+      path: 'following',
+      select: 'name email profilePhoto status isVerified',
+    });
 
   return user;
 };
@@ -91,7 +99,10 @@ const removeFollowingFromDB = async (
   const followId = new ObjectId(followingId);
 
   if (!user?.following?.some((id) => id.equals(followId))) {
-    throw new AppError(httpStatus.BAD_REQUEST, "You are not following this profile!");
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'You are not following this profile!'
+    );
   }
 
   const session = await mongoose.startSession();

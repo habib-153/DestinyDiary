@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import Swal from "sweetalert2";
+import { Tooltip } from "@nextui-org/tooltip";
 
 import UpdatePostModal from "./modal/PostModals/UpdatePostModal";
 import AuthModal from "./modal/AuthModal/AuthModal";
@@ -148,6 +149,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
     >
       <CardHeader className="justify-between">
         <div className="flex gap-3 items-center">
+          <Tooltip content={<span>View Profile</span>}>
+          <Link href={`profile/${author?._id}`}>
           <div className="flex gap-3">
             <Avatar size="sm" src={author?.profilePhoto} />
             <div className="flex flex-col gap-1 items-start justify-center">
@@ -159,6 +162,9 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
               </h5>
             </div>
           </div>
+          </Link>
+            
+          </Tooltip>
           <div>
             {
              !isAuthorOrAdmin ? <div> {user && isFollowing(user?._id as string) ? (

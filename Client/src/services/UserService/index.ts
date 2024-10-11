@@ -14,6 +14,17 @@ export const getAllUsers = async (query?: string) => {
   }
 };
 
+export const getSingleUser = async (id: string) => {
+  try {
+    const res = await axiosInstance.get(`/users/${id}`);
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 export const updateUserRole = async (id: string, payload: any) => {
   try {
     const { data } = await axiosInstance.put(`/users/${id}`, payload);
