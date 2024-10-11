@@ -6,7 +6,7 @@
 
 ### Demo Video
 
-[![Watch Demo](./src//assets/Screenshot%202024-08-30%20142030.png)](https://drive.google.com/file/d/1GxbQl2b5xDFbauQ9Fwe0igiQtl0QhX43/view?usp=sharing)
+[![Watch Demo](./Client/src/assets/Screenshot%202024-10-11%20200101.png)](https://drive.google.com/file/d/1SoijoL4_ncbGeZKH6ZVr2x_64mb2HsWA/view?usp=drive_link)
 
 ### Credentials for several Roles
 
