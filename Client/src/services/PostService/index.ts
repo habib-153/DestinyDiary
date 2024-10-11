@@ -16,7 +16,7 @@ export const createPost = async (data: FormData) => {
 
     return response.data;
   } catch (error: any) {
-    console.log(error.response ? error.response.data : error.message);
+    //console.log(error.response ? error.response.data : error.message);
   }
 };
 

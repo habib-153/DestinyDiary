@@ -121,7 +121,6 @@ const ProfilePage = ({ user }: { user: IUser }) => {
             >
               Edit Profile
             </Button>
-            {totalUpVotes}
             {!isVerified && totalUpVotes >= 1 && (
               <Button
                 color="primary"
