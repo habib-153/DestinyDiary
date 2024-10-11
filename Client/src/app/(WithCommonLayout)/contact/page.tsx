@@ -12,13 +12,13 @@ export default function ContactUs() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Column - Contact Form */}
         <div className="space-y-6">
-          <h1 className="text-4xl font-bold text-[#1A5F7A] mb-4">
+          <h1 className="text-4xl font-bold text-[#1A5F7A]  mb-4">
             Get in Touch
           </h1>
 
           <Card className="">
             <CardBody className="space-y-4">
-              <h2 className="text-2xl font-semibold text-[#001524] mb-2">
+              <h2 className="text-2xl font-semibold text-[#001524] dark:text-[#1A5F7A] mb-2">
                 Send Us a Message
               </h2>
               <ContactForm />

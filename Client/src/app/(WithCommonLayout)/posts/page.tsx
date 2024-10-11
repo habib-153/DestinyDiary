@@ -34,7 +34,6 @@ const Categories = [
 const SortOptions = [
   { key: "upvotes", name: "Most Upvoted" },
   { key: "downvotes", name: "Most Downvoted" },
-  { key: "recent", name: "Most Recent" },
 ];
 
 const Posts = () => {
@@ -98,7 +97,7 @@ const Posts = () => {
     <div className="max-w-7xl relative mx-auto py-5">
       <div className="w-full text-right absolute -top-5 sm:top-5">
         <Button
-          className="bg-black text-white font-medium"
+          className="bg-black text-white dark:bg-white dark:text-black font-medium "
           onClick={() => (user ? setOpenModal(true) : setOpenAuthModal(true))}
         >
           Create A Post

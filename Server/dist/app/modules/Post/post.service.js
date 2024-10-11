@@ -111,7 +111,7 @@ const getAllPostsFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
     }
     if (sort === 'upvotes' || sort === 'downvotes') {
         aggregationPipeline.push({
-            $sort: sort === 'upvotes' ? { upvoteCount: -1 } : { downvoteCount: 1 },
+            $sort: sort === 'upvotes' ? { upvoteCount: -1 } : { downvoteCount: -1 },
         });
     }
     aggregationPipeline.push({ $skip: skip }, { $limit: limitNumber });

@@ -150,53 +150,67 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
       <CardHeader className="justify-between">
         <div className="flex gap-3 items-center">
           <Tooltip content={<span>View Profile</span>}>
-          <Link href={`profile/${author?._id}`}>
-          <div className="flex gap-3">
-            <Avatar size="sm" src={author?.profilePhoto} />
-            <div className="flex flex-col gap-1 items-start justify-center">
-              <h4 className="text-small font-semibold leading-none">
-                {author?.name}
-              </h4>
-              <h5 className="text-small tracking-tight text-default-400">
-                {category}
-              </h5>
-            </div>
-          </div>
-          </Link>
-            
+            <Link href={`profile/${author?._id}`}>
+              <div className="flex gap-3">
+                <Avatar size="sm" src={author?.profilePhoto} />
+                <div className="flex flex-col gap-1 items-start justify-center">
+                  <h4 className="text-small font-semibold leading-none">
+                    {author?.name}
+                  </h4>
+                  <h5 className="text-small tracking-tight text-default-400">
+                    {category}
+                  </h5>
+                </div>
+              </div>
+            </Link>
           </Tooltip>
           <div>
-            {
-             !isAuthorOrAdmin ? <div> {user && isFollowing(user?._id as string) ? (
-              <Button
-                color="danger"
-                size="sm"
-                variant="flat"
-                onClick={() =>
-                  handleUnFollow(author?._id as string, author?.name as string)
-                }
-              >
-                Unfollow
-              </Button>
+            {!isAuthorOrAdmin ? (
+              <div>
+                {" "}
+                {user && isFollowing(user?._id as string) ? (
+                  <Button
+                    color="danger"
+                    size="sm"
+                    variant="flat"
+                    onClick={() => {
+                      user
+                        ? handleUnFollow(
+                          author?._id as string,
+                          author?.name as string
+                        )
+                        : setOpenAuthModal(true);
+                    }}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button
+                    color="primary"
+                    size="sm"
+                    variant="flat"
+                    onClick={() => {
+                      user
+                        ? handleFollow(
+                            author?._id as string,
+                            author?.name as string
+                          )
+                        : setOpenAuthModal(true);
+                    }}
+                  >
+                    Follow
+                  </Button>
+                )}
+              </div>
             ) : (
-              <Button
-                color="primary"
-                size="sm"
-                variant="flat"
-                onClick={() =>
-                  handleFollow(author?._id as string, author?.name as string)
-                }
-              >
-                Follow
-              </Button>
-            )}</div> : <div />
-            }
+              <div />
+            )}
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex mt-2 items-center">
           {status === "PREMIUM" && (
-            <Chip
+            <Chip className="absolute right-0 top-0"
               color="warning"
               startContent={<Crown className="w-4 h-4 text-yellow-500" />}
               variant="flat"
@@ -204,7 +218,6 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
               Premium
             </Chip>
           )}
-          {/* {isAuthorOrAdmin ? ( */}
           <Dropdown>
             <DropdownTrigger>
               <Button
@@ -262,8 +275,8 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
         </div>
       </CardHeader>
       {status === "PREMIUM" && !isPremiumUser ? (
-        <CardBody className="px-3 py-0">
-          <div className="flex flex-col items-center justify-center h-full">
+        <CardBody className="px-3 py-0 h-96">
+          <div className="flex flex-col text-center items-center justify-center h-full">
             <Lock className="w-10 h-10 text-gray-400" />
             <p className="text-gray-400">
               This post is only accessible to premium and verified users.
@@ -296,8 +309,10 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
                 color="primary"
                 startContent={<ThumbsUp className="w-4 h-4" />}
                 variant="solid"
-                onClick={() => { user ?
-                  handleUpVote(_id as string, true) : setOpenAuthModal(true);
+                onClick={() => {
+                  user
+                    ? handleUpVote(_id as string, true)
+                    : setOpenAuthModal(true);
                 }}
               >
                 {upvoteCount}
@@ -307,8 +322,10 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
                 color="primary"
                 startContent={<ThumbsUp className="w-4 h-4" />}
                 variant="light"
-                onClick={() => { user ?
-                  handleUpVote(_id as string, false) : setOpenAuthModal(true);
+                onClick={() => {
+                  user
+                    ? handleUpVote(_id as string, false)
+                    : setOpenAuthModal(true);
                 }}
               >
                 {upvoteCount}
