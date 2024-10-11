@@ -42,6 +42,6 @@ export const updateAccessTokenInCookies = (updatedUser: IUser) => {
 
     cookies().set("accessToken", newAccessToken);
   } catch (error) {
-    console.error("Error signing JWT: ", error);
+    //console.error("Error signing JWT: ", error);
   }
 };

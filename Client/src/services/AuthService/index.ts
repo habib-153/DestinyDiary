@@ -6,7 +6,6 @@ import { jwtDecode } from "jwt-decode";
 
 import axiosInstance from "@/src/libs/AxiosInstance";
 import envConfig from "@/src/config/envConfig";
-import { toast } from "sonner";
 
 export const registerUser = async (userData: FieldValues) => {
   try {

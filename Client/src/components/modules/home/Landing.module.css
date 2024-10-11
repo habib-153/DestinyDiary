@@ -27,7 +27,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('@/src/assets/backgroundBanner.jpg');
+    background-image: url('https://res.cloudinary.com/drrhtmzpk/image/upload/v1728582630/wm9uo86y7la-1728582629483-image-backgroundBanner.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;

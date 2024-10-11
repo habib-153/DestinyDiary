@@ -1,5 +1,3 @@
-// import { Input } from "@nextui-org/input";
-// import { SearchIcon } from "../../icons";
 import TravelAnimation from "./Animation";
 import styles from "./Landing.module.css";
 

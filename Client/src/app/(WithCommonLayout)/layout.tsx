@@ -1,9 +1,7 @@
-/* eslint-disable prettier/prettier */
-
 import Footer from "@/src/components/modules/Shared/Footer";
 import { Navbar } from "@/src/components/UI/Navbar/Navbar";
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="relative flex flex-col h-screen">
       <Navbar />

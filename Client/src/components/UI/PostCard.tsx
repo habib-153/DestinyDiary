@@ -32,6 +32,7 @@ import { useReactToPrint } from "react-to-print";
 import Swal from "sweetalert2";
 
 import UpdatePostModal from "./modal/PostModals/UpdatePostModal";
+import AuthModal from "./modal/AuthModal/AuthModal";
 
 import { IPost } from "@/src/types";
 import { useUser } from "@/src/context/user.provider";
@@ -43,7 +44,6 @@ import {
   useRemoveUpVoteFromPost,
 } from "@/src/hooks/post.hook";
 import { useFollowUser, useUnfollowUser } from "@/src/hooks/user.hook";
-import AuthModal from "./modal/AuthModal/AuthModal";
 
 const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -183,7 +183,7 @@ const PostCard = ({ post, full }: { post: IPost; full: boolean }) => {
               >
                 Follow
               </Button>
-            )}</div> : <div></div>
+            )}</div> : <div />
             }
           </div>
         </div>
