@@ -39,7 +39,15 @@ const getAllUsersFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
     return { result, meta };
 });
 const getSingleUserFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(id);
+    const user = yield user_model_1.User.findById(id)
+        .populate({
+        path: 'followers',
+        select: 'name email profilePhoto status isVerified', // Select only needed fields
+    })
+        .populate({
+        path: 'following',
+        select: 'name email profilePhoto status isVerified',
+    });
     return user;
 });
 const addFollowingInDB = (userData, followingId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -78,7 +86,7 @@ const removeFollowingFromDB = (userData, followingId) => __awaiter(void 0, void 
     // Ensure followingId is ObjectId
     const followId = new ObjectId(followingId);
     if (!((_a = user === null || user === void 0 ? void 0 : user.following) === null || _a === void 0 ? void 0 : _a.some((id) => id.equals(followId)))) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "You are not following this profile!");
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'You are not following this profile!');
     }
     const session = yield mongoose_1.default.startSession();
     try {
