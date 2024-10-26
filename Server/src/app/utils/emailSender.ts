@@ -51,7 +51,7 @@ const sendEmail = async (email: string, resetLink: string) => {
                             <td style="padding: 40px 30px;">
                                 <h2 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">Hello, Traveler!</h2>
                                 <p style="color: #555555; margin: 0 0 25px 0; font-size: 16px; line-height: 1.5;">We received a request to reset the password for your DestinyDiary account. Don't worry – it happens to the best of explorers!</p>
-                                <p style="color: #555555; margin: 0 0 25px 0; font-size: 16px; line-height: 1.5;">To reset your password, click the button below. This link will expire in ${5}} min.</p>
+                                <p style="color: #555555; margin: 0 0 25px 0; font-size: 16px; line-height: 1.5;">To reset your password, click the button below. This link will expire in ${20} min.</p>
                                 
                                 <!-- Button -->
                                 <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto;">

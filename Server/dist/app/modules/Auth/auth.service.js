@@ -134,7 +134,7 @@ const forgetPassword = (userEmail) => __awaiter(void 0, void 0, void 0, function
     };
     const resetToken = (0, verifyJWT_1.createToken)(jwtPayload, config_1.default.jwt_access_secret, '20m');
     const resetUILink = `${config_1.default.reset_pass_ui_link}?email=${user.email}&token=${resetToken} `;
-    emailSender_1.EmailHelper.sendEmail(user.email, resetUILink);
+    yield emailSender_1.EmailHelper.sendEmail(user.email, resetUILink);
 });
 const resetPassword = (payload, token) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.isUserExistsByEmail(payload.email);
