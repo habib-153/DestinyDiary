@@ -14,7 +14,7 @@ export default function AboutUs() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Column - Mission and Vision */}
         <div className="space-y-6">
-          <h1 className="text-4xl font-bold text-[#1A5F7A] mb-4">
+          <h1 className="text-4xl font-bold light:text-[#1A5F7A] mb-4">
             About DestinyDiary
           </h1>
 
@@ -32,21 +32,21 @@ export default function AboutUs() {
           </Card>
 
           <div className="grid grid-cols-2 gap-4">
-            <Card className="bg-white">
+            <Card className="light:bg-white">
               <CardBody className="text-center">
                 <Users className="mx-auto mb-2 text-[#FE6244]" size={32} />
                 <h3 className="font-semibold mb-1">Community First</h3>
-                <p className="text-sm text-[#4F6F52]">
+                <p className="text-sm light:text-[#4F6F52]">
                   Built by travelers, for travelers
                 </p>
               </CardBody>
             </Card>
 
-            <Card className="bg-white">
+            <Card className="light:bg-white">
               <CardBody className="text-center">
                 <Globe className="mx-auto mb-2 text-[#FE6244]" size={32} />
                 <h3 className="font-semibold mb-1">Global Reach</h3>
-                <p className="text-sm text-[#4F6F52]">
+                <p className="text-sm light:text-[#4F6F52]">
                   Connecting explorers worldwide
                 </p>
               </CardBody>

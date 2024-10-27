@@ -3,10 +3,10 @@
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
+import { revalidateTag } from "next/cache";
 
 import axiosInstance from "@/src/libs/AxiosInstance";
 import envConfig from "@/src/config/envConfig";
-import { revalidateTag } from "next/cache";
 
 export const registerUser = async (userData: FieldValues) => {
   try {

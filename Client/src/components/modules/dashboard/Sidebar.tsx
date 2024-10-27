@@ -1,7 +1,14 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
-import { MessageSquareQuote, Contact, ContactRound, Menu, LogOut } from "lucide-react";
+import {
+  MessageSquareQuote,
+  Contact,
+  ContactRound,
+  Menu,
+  LogOut,
+} from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -44,12 +51,12 @@ const Sidebar = ({ specificLinks, title }: SidebarProps) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { setUser, setIsLoading: userLoading } = useUser();
   const toggleSidebar = () => setIsOpen(!isOpen);
-const router = useRouter()
-const pathname = usePathname()
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = () => {
     logout();
-    setUser(null);
+    //setUser(null);
     userLoading(true);
 
     if (protectedRoutes.some((route) => pathname.match(route))) {
@@ -69,9 +76,9 @@ const pathname = usePathname()
 
   useEffect(() => {
     if (isOpen) {
-      document.addEventListener("mousedown", handleClick); 
+      document.addEventListener("mousedown", handleClick);
     } else {
-      document.removeEventListener("mousedown", handleClick); 
+      document.removeEventListener("mousedown", handleClick);
     }
 
     return () => {
@@ -81,67 +88,70 @@ const pathname = usePathname()
 
   return (
     <>
-<div className="relative">
-      <Button
-        className="absolute top-0 left-0 z-10 lg:hidden p-2 m-2 text-gray-600 hover:text-gray-800"
-        onClick={toggleSidebar}
-      >
-        <Menu size={28} />
-      </Button>
+      <div className="relative">
+        <Button
+          className="absolute top-0 left-0 z-10 lg:hidden p-2 m-2 light:text-gray-600 light:hover:text-gray-800"
+          onClick={toggleSidebar}
+        >
+          <Menu size={28} />
+        </Button>
 
-      {/* Sidebar Drawer */}
-      <div
-        ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full w-52 md:w-72 bg-gray-200 z-50 transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 lg:translate-x-0 lg:relative lg:flex p-4 flex flex-col`}
-      >
-        <div className="w-full space-y-3 flex-grow">
-        <Link href={"/"}>
-          <div className="mb-6 text-center">
-            <h2 className="text-xl font-bold">{title}</h2>
-          </div>
-        </Link>
-        <Divider />
-        <div>
-            <nav className="space-y-1">
-              {specificLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100"
-                  href={link.href}
-                >
-                  {link.icon}
-                  <span>{link.label}</span>
-                </Link>
-              ))}
-            </nav>
-          </div>
-          <Divider />
-          <div>
-            <nav className="space-y-1">
-              {commonLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100"
-                  href={link.href}
-                >
-                  {link.icon}
-                  <span>{link.label}</span>
-                </Link>
-              ))}
-            </nav>
-          </div>
-          <Divider className="" />
-          <div className="cursor-pointer">
-            <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-gray-600 hover:bg-gray-100"  onClick={handleLogout}>
-              <LogOut />
-              <span>Logout</span>
-            </button>
+        {/* Sidebar Drawer */}
+        <div
+          ref={sidebarRef}
+          className={`fixed top-0 left-0 h-full w-52 md:w-72 light:bg-gray-200 dark:bg-gray-900 z-50 transform ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 lg:translate-x-0 lg:relative lg:flex p-4 flex flex-col`}
+        >
+          <div className="w-full space-y-3 flex-grow">
+            <Link href={"/"}>
+              <div className="mb-6 text-center">
+                <h2 className="text-xl font-bold light:text-gray-600 light:hover:bg-gray-100 rounded-lg px-3 py-2">DestinyDiary</h2>
+              </div>
+            </Link>
+            <Divider />
+            <div>
+              <nav className="space-y-1">
+                {specificLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 light:text-gray-600 light:hover:bg-gray-100"
+                    href={link.href}
+                  >
+                    {link.icon}
+                    <span>{link.label}</span>
+                  </Link>
+                ))}
+              </nav>
+            </div>
+            <Divider />
+            <div>
+              <nav className="space-y-1">
+                {commonLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 light:text-gray-600 light:hover:bg-gray-100"
+                    href={link.href}
+                  >
+                    {link.icon}
+                    <span>{link.label}</span>
+                  </Link>
+                ))}
+              </nav>
+            </div>
+            <Divider className="" />
+            <div className="cursor-pointer">
+              <button
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 light:text-gray-600 light:hover:bg-gray-100"
+                onClick={handleLogout}
+              >
+                <LogOut />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

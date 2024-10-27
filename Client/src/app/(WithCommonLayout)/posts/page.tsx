@@ -12,6 +12,7 @@ import { Card, CardBody } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
 import { Chip } from "@nextui-org/chip";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useSearchParams } from "next/navigation";
 
 import PostCard from "@/src/components/UI/PostCard";
 import envConfig from "@/src/config/envConfig";
@@ -37,10 +38,13 @@ const SortOptions = [
 ];
 
 const Posts = () => {
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get('category') || "";
+
   const [openModal, setOpenModal] = useState(false);
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(initialCategory || "");
   const [sort, setSort] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [filterApplied, setFilterApplied] = useState(false);

@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useRef } from "react";
 import { useState } from "react";
 import { Button } from "@nextui-org/button";
 import {
@@ -54,6 +54,7 @@ export default function UpdatePostModal({
   const [isSelected, setIsSelected] = useState(
     post?.status === "PREMIUM" ? true : false
   );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { mutate: updatePost } = useUpdatePost();
 
@@ -93,16 +94,20 @@ export default function UpdatePostModal({
     };
 
     formData.append("data", JSON.stringify(postData));
-    if(data?.image){
-        formData.append("image", data.image);
+    if (data?.image) {
+      formData.append("image", data.image);
     }
-    // formData.append("image", data.image);
 
     updatePost({ postData: formData, id: post?._id as string });
     setIsOpen(false);
-    // reset();
-    // setImagePreview(null);
-    // setContent("");
+  };
+
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    setValue("image", null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -197,7 +202,6 @@ export default function UpdatePostModal({
                   >
                     <div className="space-y-4 py-2">
                       <div>
-                        {/* <label className="text-sm font-medium mb-2 block">Category</label> */}
                         <Controller
                           control={control}
                           defaultValue={post?.category}
@@ -241,7 +245,6 @@ export default function UpdatePostModal({
                       </Card>
 
                       <div>
-                        {/* <label className="text-sm font-medium mb-2 block">Cover Image</label> */}
                         <div className="border-2 border-dashed rounded-lg p-4 text-center">
                           {imagePreview ? (
                             <div className="relative">
@@ -255,10 +258,7 @@ export default function UpdatePostModal({
                                 color="danger"
                                 size="sm"
                                 variant="flat"
-                                onPress={() => {
-                                  setImagePreview(null);
-                                  setValue("image", null);
-                                }}
+                                onPress={handleRemoveImage}
                               >
                                 Remove
                               </Button>
@@ -270,10 +270,10 @@ export default function UpdatePostModal({
                                 <label className="relative cursor-pointer rounded-md bg-white font-semibold text-primary-600">
                                   <span>Upload a file</span>
                                   <input
+                                    ref={fileInputRef}
                                     required
                                     accept="image/*"
                                     className="sr-only"
-                                    defaultValue={post?.image}
                                     type="file"
                                     onChange={handleFileChange}
                                   />

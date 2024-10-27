@@ -41,24 +41,18 @@ const Footer = () => {
               <a className="link link-hover" href="/">
                 Home
               </a>
-              <a className="link link-hover" href="/">
+              <a className="link link-hover" href="/about">
                 About Us
-              </a>
-              <a className="link link-hover" href="/">
-                Success Page
               </a>
               <a className="link link-hover" href="/">
                 Terms And Conditions
               </a>
             </nav>
             <nav className="flex flex-col">
-              <a className="link link-hover" href="/">
-                Services
+              <a className="link link-hover" href="/posts">
+                NewsFeed
               </a>
-              <a className="link link-hover" href="/">
-                Scheduling
-              </a>
-              <a className="link link-hover" href="/">
+              <a className="link link-hover" href="/contact">
                 Contact Us
               </a>
             </nav>
